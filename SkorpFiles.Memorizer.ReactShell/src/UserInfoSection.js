@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './UserInfoSection.css';
 import UserLoginForm from './UserLoginForm';
+import LoggedUserInfoHeader from './LoggedUserInfoHeader';
 
 class UserInfoSection extends React.Component {
     constructor(props) {
@@ -12,11 +13,7 @@ class UserInfoSection extends React.Component {
     render() {
         if (this.state.isUserLogged)
             return (
-                <div>
-                    <section class="userlogin">
-                        <i>{this.state.userLogin}</i> &#8226; <span class="logOutLink"><a href="#" id="logOutLink">Log Out</a></span>
-                    </section>
-                </div>
+                <LoggedUserInfoHeader userLogin={this.state.userLogin} logOut={() => this.logOut()} />
             );
         else
             return (

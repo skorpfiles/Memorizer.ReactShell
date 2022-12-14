@@ -1,7 +1,6 @@
 import React from 'react';
 import './MemorizerApp.css';
 import UserInfoSection from './UserInfoSection';
-import UserLoginForm from './UserLoginForm';
 
 class MemorizerApp extends React.Component {
 
