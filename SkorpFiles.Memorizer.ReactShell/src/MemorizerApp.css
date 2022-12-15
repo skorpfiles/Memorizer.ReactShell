@@ -64,3 +64,33 @@ footer {
 .userlogin {
     padding: 10px;
 }
+
+.userloginsection {
+    background-color: #777;
+    padding: 10px;
+    color: white;
+    vertical-align:middle;
+}
+
+.footertable {
+    display:table;
+    padding:0em 1em;
+    width:100%
+}
+
+.footerleftlabel {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: left
+}
+
+.footerrightlogo {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right
+}
+
+.messageinsteadofworkspace{
+    margin:1em;
+    text-align:center;
+}
