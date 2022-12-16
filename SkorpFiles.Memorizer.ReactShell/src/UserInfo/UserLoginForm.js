@@ -15,7 +15,7 @@ class UserLoginForm extends React.Component {
                         <input type="text" id="login" name="login" />
                         <label>Password:</label>
                         <input type="password" id="password" name="password" />
-                        <input type="submit" onClick={() => this.props.setLoggedUser(document.getElementById('login').value)} value="Log In" />
+                        <input type="submit" onClick={() => this.props.setLoggedUser(document.getElementById('login').value, document.getElementById('password').value)} value="Log In" />
                     </form>
                 </section>
             </div>

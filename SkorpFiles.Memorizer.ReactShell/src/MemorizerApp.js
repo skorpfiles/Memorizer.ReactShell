@@ -3,12 +3,13 @@ import './MemorizerApp.css';
 import UserInfoSection from './UserInfo/UserInfoSection';
 import EditorWorkspace from './QuestionnairesEditor/EditorWorkspace'
 import developerLogo from './skorpFilesLogo.png';
+import GlobalConstants from './GlobalConstants.js';
 
 class MemorizerApp extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { isUserLogged: false, userLogin: null };
+        this.state = { isUserLogged: false, userLogin: null, userToken: null, isLoggingError: false, loggingErrorMessage: null };
     }
 
     render() {
@@ -31,8 +32,8 @@ class MemorizerApp extends React.Component {
                 <div class="userloginsection">
                     <UserInfoSection
                         isUserLogged={this.state.isUserLogged}
-                        userLogin={this.state.userLogin}
-                        logIn={(login) => this.logIn(login)}
+                        userLogin={this.state.userToken}
+                        logIn={(login,password) => this.logIn(login,password)}
                         logOut={() => this.logOut()} />
                 </div>
 
@@ -54,9 +55,34 @@ class MemorizerApp extends React.Component {
             )
     }
 
-    logIn(login) {
-        this.setState({ isUserLogged: true });
-        this.setState({ userLogin: login });
+    logIn(login, password) {
+        fetch("https://localhost:7205/Account/Token",
+            {
+                method: "POST",
+                body: JSON.stringify({ login, password })
+            })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isUserLogged: true,
+                        userLogin: login,
+                        userToken: result.accessToken,
+                        isLoggingError: false,
+                        loggingErrorMessage: null
+                    });
+                },
+                (error) => {
+                    alert(error);
+                    this.setState({
+                        isUserLogged: true,
+                        userLogin: login,
+                        userToken: null,
+                        isLoggingError: true,
+                        loggingErrorMessage: error
+                    });
+                }
+            )
     }
 
     logOut() {

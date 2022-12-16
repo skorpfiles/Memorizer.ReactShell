@@ -16,11 +16,9 @@ class UserInfoSection extends React.Component {
             );
         else
             return (
-                <UserLoginForm setLoggedUser={(login) => this.props.logIn(login)} />
+                <UserLoginForm setLoggedUser={(login,password) => this.props.logIn(login, password)} />
             );
     }
-
-
 }
 
 export default UserInfoSection;
