@@ -22,6 +22,7 @@ class UserLoginForm extends React.Component {
                         <label>Password:</label>
                         <input type="password" id="password" name="password" />
                         <input type="submit" value="Submit Form" />
+                        <label>{this.props.loggingErrorMessage}</label>
                     </form>
                 </section>
             </div>

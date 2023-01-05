@@ -1,1 +1,1 @@
-let host = 'https://localhost:7205/';
+export const ApiHostUrl = 'https://localhost:7205';

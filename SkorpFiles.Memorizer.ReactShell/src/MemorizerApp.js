@@ -3,7 +3,7 @@ import './MemorizerApp.css';
 import UserInfoSection from './UserInfo/UserInfoSection';
 import EditorWorkspace from './QuestionnairesEditor/EditorWorkspace'
 import developerLogo from './skorpFilesLogo.png';
-import GlobalConstants from './GlobalConstants.js';
+import { ApiHostUrl } from './GlobalConstants';
 import { useState } from 'react';
 
 class MemorizerApp extends React.Component {
@@ -42,8 +42,11 @@ class MemorizerApp extends React.Component {
                     <UserInfoSection
                         isUserLogged={this.state.isUserLogged}
                         userLogin={this.state.userToken}
-                        logIn={(login,password) => this.logIn(login,password)}
-                        logOut={() => this.logOut()} />
+                        logIn={(login, password) => this.logIn(login, password)}
+                        logOut={() => this.logOut()}
+                        isLoggingError={this.state.isLoggingError}
+                        loggingErrorMessage={this.state.loggingErrorMessage}
+                    />
                 </div>
 
                 {body}
@@ -76,7 +79,7 @@ class MemorizerApp extends React.Component {
             });
 
             const response =
-                await fetch("https://localhost:7205/Account/Token",
+                await fetch(ApiHostUrl + "/Account/Token",
                     {
                         method: "POST",
                         body: JSON.stringify({ login, password }),
@@ -87,29 +90,30 @@ class MemorizerApp extends React.Component {
                         }
                     });
 
-            if (!response.ok) {
+            if (response.ok) {
+                const result = await response.json();
+
+                this.setState({
+                    isUserLogged: true,
+                    isUserLogging: false,
+                    userLogin: result.login,
+                    userToken: result.accessToken,
+                    isLoggingError: false,
+                    loggingErrorMessage: null
+                });
+            }
+            else {
+                const result = await response.json();
+
                 this.setState({
                     isUserLogged: false,
                     isUserLogging: false,
                     userLogin: null,
                     userToken: null,
                     isLoggingError: true,
-                    loggingErrorMessage: `Error! status: ${response.status}`
+                    loggingErrorMessage: `${response.status} ${result.errorText}`
                 });
             }
-
-            const result = await response.json();
-
-            const resultJson = JSON.stringify(result, null, 4);
-
-            this.setState({
-                isUserLogged: true,
-                isUserLogging: false,
-                userLogin: resultJson.login,
-                userToken: resultJson.accessToken,
-                isLoggingError: false,
-                loggingErrorMessage: null
-            });
         }
         catch (error) {
             console.log(error);
