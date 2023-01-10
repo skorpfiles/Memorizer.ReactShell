@@ -15,7 +15,7 @@ class EditorWorkspace extends React.Component {
     render() {
         let questionnairesListField;
         if (this.state.items.length != 0)
-            questionnairesListField = <QuestionnairesList items={this.state.items} />;
+            questionnairesListField = <QuestionnairesList items={this.state.items} accessToken={this.props.accessToken} />;
         else
             questionnairesListField = <label>No items</label>;
 

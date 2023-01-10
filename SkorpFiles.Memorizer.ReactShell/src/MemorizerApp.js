@@ -15,7 +15,7 @@ class MemorizerApp extends React.Component {
             isUserLogged: false,
             isUserLogging: false,
             userLogin: null,
-            userToken: null,
+            accessToken: null,
             isLoggingError: false,
             loggingErrorMessage: null
         };
@@ -27,7 +27,7 @@ class MemorizerApp extends React.Component {
         if (this.state.isUserLogged)
             body = (
                 <section>
-                    <EditorWorkspace isUserLogged={this.state.isUserLogged} />
+                    <EditorWorkspace isUserLogged={this.state.isUserLogged} accessToken={this.state.accessToken} />
                 </section>
             );
         else
@@ -41,7 +41,7 @@ class MemorizerApp extends React.Component {
                 <div className="userloginsection">
                     <UserInfoSection
                         isUserLogged={this.state.isUserLogged}
-                        userLogin={this.state.userToken}
+                        userLogin={this.state.userLogin}
                         logIn={(login, password) => this.logIn(login, password)}
                         logOut={() => this.logOut()}
                         isLoggingError={this.state.isLoggingError}
@@ -73,7 +73,7 @@ class MemorizerApp extends React.Component {
                 isUserLogged: false,
                 isUserLogging: true,
                 userLogin: null,
-                userToken: null,
+                accessToken: null,
                 isLoggingError: false,
                 loggingErrorMessage: null
             });
@@ -97,7 +97,7 @@ class MemorizerApp extends React.Component {
                     isUserLogged: true,
                     isUserLogging: false,
                     userLogin: result.login,
-                    userToken: result.accessToken,
+                    accessToken: result.accessToken,
                     isLoggingError: false,
                     loggingErrorMessage: null
                 });
@@ -109,7 +109,7 @@ class MemorizerApp extends React.Component {
                     isUserLogged: false,
                     isUserLogging: false,
                     userLogin: null,
-                    userToken: null,
+                    accessToken: null,
                     isLoggingError: true,
                     loggingErrorMessage: `${response.status} ${result.errorText}`
                 });
@@ -125,7 +125,7 @@ class MemorizerApp extends React.Component {
             isUserLogged: false,
             isUserLogging: false,
             userLogin: null,
-            userToken: null,
+            accessToken: null,
             isLoggingError: false,
             loggingErrorMessage: null
         });
