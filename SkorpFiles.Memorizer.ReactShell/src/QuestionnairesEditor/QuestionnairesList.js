@@ -1,4 +1,5 @@
 import React from 'react';
+import { ApiHostUrl } from '../GlobalConstants';
 
 class QuestionnairesList extends React.Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class QuestionnairesList extends React.Component {
     async componentDidMount() {
         try {
             const response =
-                await fetch("https://localhost:7205/Repository/Questionnaires",
+                await fetch(ApiHostUrl + "/Repository/Questionnaires",
                     {
                         method: "GET",
                         headers: {
@@ -65,8 +66,8 @@ class QuestionnairesList extends React.Component {
                         <ul>
                             {this.state.items.map(item => (
                                 <div key={item.id} onClick={() => {
-                                    this.doEvent(item.id);
-                                }}><li><a href="#">{item.id}</a></li></div>
+                                    this.props.switchItem(item);
+                                }}><li><a href="#">{item.name}</a></li></div>
                             ))}
                         </ul>
                     </div>

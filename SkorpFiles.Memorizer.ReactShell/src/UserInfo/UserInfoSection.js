@@ -20,6 +20,7 @@ class UserInfoSection extends React.Component {
                     logIn={(login, password) => this.props.logIn(login, password)}
                     isLoggingError={this.props.isLoggingError}
                     loggingErrorMessage={this.props.loggingErrorMessage}
+                    isUserLogging={this.props.isUserLogging}
                 />
             );
     }

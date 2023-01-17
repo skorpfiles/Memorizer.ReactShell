@@ -41,6 +41,7 @@ class MemorizerApp extends React.Component {
                 <div className="userloginsection">
                     <UserInfoSection
                         isUserLogged={this.state.isUserLogged}
+                        isUserLogging={this.state.isUserLogging}
                         userLogin={this.state.userLogin}
                         logIn={(login, password) => this.logIn(login, password)}
                         logOut={() => this.logOut()}
