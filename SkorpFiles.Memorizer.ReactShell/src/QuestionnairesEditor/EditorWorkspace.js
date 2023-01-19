@@ -10,7 +10,7 @@ class EditorWorkspace extends React.Component {
                 { id: 1, text: "item1" },
                 { id: 2, text: "item2" }
             ],
-            currentItem: {}
+            currentItem: null
         };
     }
 
@@ -26,18 +26,18 @@ class EditorWorkspace extends React.Component {
             questionnairesListField = <label>No items</label>;
 
         let workspaceField;
-        if (this.state.currentItem != {})
-            workspaceField = (<QuestionnaireDetails currentItem={this.state.currentItem} />);
+        if (this.state.currentItem != null)
+            workspaceField = (<QuestionnaireDetails currentItem={this.state.currentItem} accessToken={this.props.accessToken} />);
         else
             workspaceField = (<label>Nothing is selected</label>);
 
         return (
             <div>
-                <nav>
+                <nav style={{height:"100%"}}>
                     {questionnairesListField}
                 </nav>
 
-                <workspace>
+                <workspace style={{ height: "100%" }}>
                     {workspaceField}
                 </workspace>
             </div>
