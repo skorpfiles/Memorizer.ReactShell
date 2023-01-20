@@ -57,17 +57,19 @@ class QuestionnairesList extends React.Component {
 
     render() {
         if (this.state.dataIsLoading)
-            return (<label>Data is loading...</label>);
+            return (<label style={{color:"white"}}>Data is loading...</label>);
         else {
             if (this.state.dataIsLoaded) {
                 return (
                     <div>
-                        <h1>Questionnaires</h1>
+                        <div style={{ width: "100%", color: "white", fontSize: "2em", padding: "10px" }}  >
+                            Questionnaires
+                        </div>
                         <ul>
                             {this.state.items.map(item => (
                                 <div key={item.id} onClick={() => {
                                     this.props.switchItem(item);
-                                }}><li><a href="#">{item.name}</a></li></div>
+                                }}><li><a href="#" style={{ color: "white" }} >{item.name}</a></li></div>
                             ))}
                         </ul>
                     </div>

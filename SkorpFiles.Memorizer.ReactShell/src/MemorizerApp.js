@@ -26,14 +26,14 @@ class MemorizerApp extends React.Component {
 
         if (this.state.isUserLogged)
             body = (
-                <section>
+                <div>
                     <EditorWorkspace isUserLogged={this.state.isUserLogged} accessToken={this.state.accessToken} />
-                </section>
+                </div>
             );
         else
             body =
-                <div className="messageinsteadofworkspace">
-                    <label>Please log in for using this tool.</label>
+                <div style={{ backgroundColor: "#0000CD", padding: "10px"}}>
+                    <label style={{ color: "white"}}>Please log in for using this tool.</label>
                 </div>
 
         return (

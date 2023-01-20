@@ -74,7 +74,7 @@ class QuestionnairesDetails extends React.Component {
     render() {
         var questionsField;
         if (this.state.questionsIsLoading)
-            questionsField = (<label>Loading...</label>);
+            questionsField = (<label style={{ color: "white" }}>Loading...</label>);
         else if (this.state.questionsIsLoaded) {
             if (this.state.questions.length != 0) {
                 questionsField = this.state.questions.map(item =>
@@ -91,11 +91,11 @@ class QuestionnairesDetails extends React.Component {
                 )
             }
             else {
-                questionsField = (<label>No items.</label>);
+                questionsField = (<label style={{ color: "white" }}>No items.</label>);
             }
         }
         else if (this.state.questionsLoadedError)
-            questionsField = (<label>{this.state.questionsLoadingErrorText}</label>);
+            questionsField = (<label style={{ color: "white" }}>{this.state.questionsLoadingErrorText}</label>);
 
         return (
             <div>

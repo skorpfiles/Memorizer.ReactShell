@@ -23,23 +23,23 @@ class EditorWorkspace extends React.Component {
                 switchItem={(newItem) => this.switchItem(newItem)}
             />;
         else
-            questionnairesListField = <label>No items</label>;
+            questionnairesListField = <label style={{ color: "white" }}>No items</label>;
 
         let workspaceField;
         if (this.state.currentItem != null)
             workspaceField = (<QuestionnaireDetails currentItem={this.state.currentItem} accessToken={this.props.accessToken} />);
         else
-            workspaceField = (<label>Nothing is selected</label>);
+            workspaceField = (<label style={{ color: "white" }}>Nothing is selected</label>);
 
         return (
-            <div>
-                <nav style={{height:"100%"}}>
+            <div style={{ display: "flex", height:"100%" }}>
+                <div style={{ flex: "0 1 500px", backgroundColor: "#000080", color:"white", padding:"10px" }}>
                     {questionnairesListField}
-                </nav>
+                </div>
 
-                <workspace style={{ height: "100%" }}>
+                <div style={{ flex:"0 1 100%", backgroundColor: "#0000CD", padding: "10px" }}>
                     {workspaceField}
-                </workspace>
+                </div>
             </div>
         );
     }

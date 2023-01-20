@@ -9,7 +9,7 @@ class LoggedUserInfoHeader extends React.Component {
         return (
             <div>
                 <section className="userlogin">
-                    <i>{this.props.userLogin}</i> &#8226; <span className="logOutLink"><a href="#" onClick={()=>this.props.logOut()} id="logOutLink">Log Out</a></span>
+                    <i>{this.props.userLogin}</i> &#8226; <span className="logOutLink"><a href="#" style={{color:"white"}} onClick={()=>this.props.logOut()} id="logOutLink">Log Out</a></span>
                 </section>
             </div>
             )
