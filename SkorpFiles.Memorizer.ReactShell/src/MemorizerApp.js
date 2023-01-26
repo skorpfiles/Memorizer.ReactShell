@@ -26,19 +26,19 @@ class MemorizerApp extends React.Component {
 
         if (this.state.isUserLogged)
             body = (
-                <div style={{ flex:"1 0 auto" }}>
+                <div className="workarea">
                     <EditorWorkspace isUserLogged={this.state.isUserLogged} accessToken={this.state.accessToken} />
                 </div>
             );
         else
             body =
-                <div style={{ backgroundColor: "#0000CD", padding: "10px", flex: "1 0 auto" }}>
-                    <label style={{ color: "white"}}>Please log in for using this tool.</label>
+                <div className="workarea mainpadding">
+                    <label className="maintext">Please log in for using this tool.</label>
                 </div>
 
         return (
-            <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-                <div className="userloginsection">
+            <div className="content">
+                <div className="header mainpadding maintext">
                     <UserInfoSection
                         isUserLogged={this.state.isUserLogged}
                         isUserLogging={this.state.isUserLogging}
@@ -52,17 +52,14 @@ class MemorizerApp extends React.Component {
 
                 {body}
 
-                <footer>
-                    <div className="footertable">
-                        <div className="footerleftlabel">
-                            <p>SkorpFiles.Memorizer.ReactShell &#8226; Test React Application</p>
-                        </div>
-                        <div className="footerrightlogo">
-                            <img src={developerLogo} alt="SkorP Files Logo" />
-                        </div>
-
+                <div className="footer mainpadding maintext">
+                    <div className="footerleftlabel">
+                        <p>SkorpFiles.Memorizer.ReactShell &#8226; Test React Application</p>
                     </div>
-                </footer>
+                    <div className="footerrightlogo">
+                        <img src={developerLogo} alt="SkorP Files Logo" />
+                    </div>
+                </div>
 
             </div>
             )

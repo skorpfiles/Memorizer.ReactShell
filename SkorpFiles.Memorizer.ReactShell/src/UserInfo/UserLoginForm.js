@@ -16,19 +16,15 @@ class UserLoginForm extends React.Component {
         var loadingMessage = this.props.isUserLogging ? (<label>Logging...</label>) : "";
 
         return (
-            <div>
-                <section className="userlogin">
-                    <form onSubmit={this.logIn}>
-                        <label>Login:</label>
-                        <input type="text" id="login" name="login" />
-                        <label>Password:</label>
-                        <input type="password" id="password" name="password" />
-                        <input type="submit" value="Submit Form" />
-                        {loadingMessage}
-                        <label>{this.props.loggingErrorMessage}</label>
-                    </form>
-                </section>
-            </div>
+            <form onSubmit={this.logIn}>
+                <label>Login:</label>
+                <input type="text" id="login" name="login" />
+                <label>Password:</label>
+                <input type="password" id="password" name="password" />
+                <input type="submit" value="Submit Form" />
+                {loadingMessage}
+                <label>{this.props.loggingErrorMessage}</label>
+            </form>
         );
     }
 }

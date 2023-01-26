@@ -1,4 +1,5 @@
 import React from 'react';
+import './LoggedUserInfoHeader.css';
 
 class LoggedUserInfoHeader extends React.Component {
     constructor(props) {
@@ -7,11 +8,9 @@ class LoggedUserInfoHeader extends React.Component {
 
     render() {
         return (
-            <div>
-                <section className="userlogin">
-                    <i>{this.props.userLogin}</i> &#8226; <span className="logOutLink"><a href="#" style={{color:"white"}} onClick={()=>this.props.logOut()} id="logOutLink">Log Out</a></span>
-                </section>
-            </div>
+            <section className="maintext">
+                <i>{this.props.userLogin}</i> &#8226; <span className="logoutlink"><a href="#" className="maintext" onClick={()=>this.props.logOut()} id="logOutLink">Log Out</a></span>
+            </section>
             )
     }
 }

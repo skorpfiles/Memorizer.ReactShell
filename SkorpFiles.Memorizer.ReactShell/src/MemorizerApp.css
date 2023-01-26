@@ -8,52 +8,6 @@ body {
     height:100%;
 }
 
-/* Style the header */
-header {
-    background-color: #666;
-    padding: 1px;
-    text-align: center;
-    font-size: 35px;
-    color: white;
-}
-
-/* Create two columns/boxes that floats next to each other */
-nav {
-    float: left;
-    width: 30%;
-    /*height: 300px;*/ /* only for demonstration, should be removed */
-    background: #ccc;
-    padding: 20px;
-}
-
-    /* Style the list inside the menu */
-/*    nav ul {
-        list-style-type: none;
-        padding: 0;
-    }*/
-
-workspace {
-    float: left;
-    width: 70%;
-    background-color: #f1f1f1;
-    /*height: 300px;*/ /* only for demonstration, should be removed */
-}
-
-/* Clear floats after the columns */
-section::after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* Style the footer */
-footer {
-    background-color: black;
-    padding: 10px;
-    text-align: center;
-    color: white;
-}
-
 /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
 @media (max-width: 600px) {
     nav, workspace {
@@ -62,20 +16,36 @@ footer {
     }
 }
 
-.userlogin {
-    padding: 10px;
-}
+/* ---- */
 
-.userloginsection {
-    background-color: black;
-    padding: 10px;
+.maintext {
     color: white;
-    vertical-align:middle;
 }
 
-.footertable {
+.workarea {
+    background-color: #0000CD;
+    flex: 1 0 auto;
+}
+
+.mainpadding {
+    padding: 10px;
+}
+
+.header {
+    background-color: black;
+    vertical-align: middle;
+}
+
+.content {
+    display:flex;
+    flex-direction:column;
+    height:100%;
+}
+
+.footer {
+    background-color: black;
+    vertical-align: middle;
     display: table;
-    padding: 0em 1em;
     width: 100%;
     left: 0;
     bottom: 0;
@@ -91,9 +61,4 @@ footer {
     display: table-cell;
     vertical-align: middle;
     text-align: right
-}
-
-.messageinsteadofworkspace{
-    margin:1em;
-    text-align:center;
 }
