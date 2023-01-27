@@ -68,6 +68,13 @@ class QuestionnairesDetails extends React.Component {
         }
         catch (error) {
             console.log(error);
+            this.setState({
+                questions: null,
+                questionsIsLoading: false,
+                questionsIsLoaded: false,
+                questionsLoadedError: true,
+                questionsLoadingErrorText: "Error: Unable to get questionnaire details."
+            });
         }
     }
 

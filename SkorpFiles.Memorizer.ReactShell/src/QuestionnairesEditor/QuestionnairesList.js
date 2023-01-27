@@ -52,6 +52,13 @@ class QuestionnairesList extends React.Component {
         }
         catch (error) {
             console.log(error);
+            this.setState({
+                items: [],
+                dataIsLoading: false,
+                dataIsLoaded: false,
+                isLoadedError: true,
+                loadedErrorText: "Error. Unable to get questionnaires."
+            });
         }
     }
 

@@ -115,6 +115,14 @@ class MemorizerApp extends React.Component {
         }
         catch (error) {
             console.log(error);
+            this.setState({
+                isUserLogged: false,
+                isUserLogging: false,
+                userLogin: null,
+                accessToken: null,
+                isLoggingError: true,
+                loggingErrorMessage: "Error: Unable to connect to API"
+            });
         }
     }
 
