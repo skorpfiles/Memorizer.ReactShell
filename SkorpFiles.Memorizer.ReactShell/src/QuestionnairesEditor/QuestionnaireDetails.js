@@ -90,9 +90,27 @@ class QuestionnairesDetails extends React.Component {
                         <div style={{ display: "table-row", fontSize: "1.5em" }}>
                             <div style={{ display: "table-cell", padding: "10px" }}><em>{item.text}</em></div>
                         </div>
-                        <div style={{ display: "table-row", backgroundColor: "#87cefa", padding: "1em" }}>
-                            <div style={{ display: "table-cell", padding: "10px" }} ><em>{item.untypedAnswer}</em></div>
+                        <div style={{ display: "table-row", backgroundColor: "#87cefa"}}>
+                            <div style={{ display: "table-cell", padding: "10px" }} >
+                                <em>{item.untypedAnswer}</em>
+                            </div>
                         </div>
+                        {(item.typedAnswers != null && item.typedAnswers.length!=0) && (
+                            <div style={{ display: "table-row", backgroundColor: "#87cefa" }}>
+                                <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
+                                    <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                        {item.typedAnswers.map(ans =>
+                                        (
+                                            <div key={ans.id} style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 10px 5px", padding: "2px" }}>
+                                                <em>{ans.text}</em>
+                                            </div>
+                                        )
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                        }
                     </div>
                 )
                 )
