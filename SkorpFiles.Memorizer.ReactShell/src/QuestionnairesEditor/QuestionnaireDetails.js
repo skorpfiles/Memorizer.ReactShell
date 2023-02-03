@@ -1,5 +1,7 @@
 import React from 'react';
 import { ApiHostUrl } from '../GlobalConstants';
+import TestName from './TestName.js';
+import EditButton from './EditButton.js';
 
 class QuestionnairesDetails extends React.Component {
     constructor(props) {
@@ -86,31 +88,8 @@ class QuestionnairesDetails extends React.Component {
             if (this.state.questions.length != 0) {
                 questionsField = this.state.questions.map(item =>
                 (
-                    <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#6495ed", fontFamily: "Arial" }}>
-                        <div style={{ display: "table-row", fontSize: "1.5em" }}>
-                            <div style={{ display: "table-cell", padding: "10px" }}><em>{item.text}</em></div>
-                        </div>
-                        <div style={{ display: "table-row", backgroundColor: "#87cefa"}}>
-                            <div style={{ display: "table-cell", padding: "10px" }} >
-                                <em>{item.untypedAnswer}</em>
-                            </div>
-                        </div>
-                        {(item.typedAnswers != null && item.typedAnswers.length!=0) && (
-                            <div style={{ display: "table-row", backgroundColor: "#87cefa" }}>
-                                <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
-                                    <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                        {item.typedAnswers.map(ans =>
-                                        (
-                                            <div key={ans.id} style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 10px 5px", padding: "2px" }}>
-                                                <em>{ans.text}</em>
-                                            </div>
-                                        )
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                        }
+                    <div key={item.id}>
+                        <TestName />
                     </div>
                 )
                 )
