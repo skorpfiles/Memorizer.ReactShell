@@ -15,8 +15,7 @@ class Question extends React.Component {
     }
 
     render() {
-        return
-        (
+        return (
             <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#6495ed", fontFamily: "Arial" }}
                 onMouseEnter={() => this.setIsShown(true)}
                 onMouseLeave={() => this.setIsShown(false)}
@@ -57,7 +56,7 @@ class Question extends React.Component {
                 )
                 }
             </div>
-        )
+        );
     }
 }
 

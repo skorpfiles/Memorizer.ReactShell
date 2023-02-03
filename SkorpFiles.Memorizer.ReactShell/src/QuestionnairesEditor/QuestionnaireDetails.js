@@ -1,6 +1,6 @@
 import React from 'react';
 import { ApiHostUrl } from '../GlobalConstants';
-import TestName from './TestName.js';
+import Question from './Question.js';
 import EditButton from './EditButton.js';
 
 class QuestionnairesDetails extends React.Component {
@@ -89,7 +89,7 @@ class QuestionnairesDetails extends React.Component {
                 questionsField = this.state.questions.map(item =>
                 (
                     <div key={item.id}>
-                        <TestName />
+                        <Question item={item}/>
                     </div>
                 )
                 )
