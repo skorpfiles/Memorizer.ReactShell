@@ -21,6 +21,39 @@ class MemorizerApp extends React.Component {
         };
     }
 
+    async componentDidMount() {
+        try {
+            var accessTokenFromCookies = this.getAccessTokenFromCookies();
+            if (accessTokenFromCookies != null) {
+                var userLoginFromCookies = this.getUserLoginFromCookies();
+                const response =
+                    await fetch(ApiHostUrl + "/Account/Check",
+                        {
+                            method: "GET",
+                            headers: {
+                                'content-type': 'application/json;charset=UTF-8',
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin,Access-Control-Allow-Headers,content-type, Authorization',
+                                'Authorization': `Bearer ${accessTokenFromCookies}`
+                            }
+                        });
+                if (response.ok) {
+                    this.setState({
+                        isUserLogged: true,
+                        isUserLogging: false,
+                        userLogin: userLoginFromCookies,
+                        accessToken: accessTokenFromCookies,
+                        isLoggingError: false,
+                        loggingErrorMessage: null
+                    });
+                }
+            }
+        }
+        catch {
+
+        }
+    }
+
     render() {
         let body;
 
@@ -91,6 +124,8 @@ class MemorizerApp extends React.Component {
             if (response.ok) {
                 const result = await response.json();
 
+                document.cookie = "accessToken=" + result.accessToken + "; userLogin=" + result.userLogin + "; ";
+
                 this.setState({
                     isUserLogged: true,
                     isUserLogging: false,
@@ -135,6 +170,22 @@ class MemorizerApp extends React.Component {
             isLoggingError: false,
             loggingErrorMessage: null
         });
+    }
+
+    getAccessTokenFromCookies() {
+        var cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('accessToken='))
+            .split('=')[1];
+        return cookieValue;
+    }
+
+    getUserLoginFromCookies() {
+        var cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('userLogin='))
+            .split('=')[1];
+        return cookieValue;
     }
 }
 
