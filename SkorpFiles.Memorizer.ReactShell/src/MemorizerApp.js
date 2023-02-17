@@ -149,18 +149,40 @@ class MemorizerApp extends React.Component {
         }
     }
 
-    logOut() {
-        this.setState({
-            isUserLogged: false,
-            isUserLogging: false,
-            userLogin: null,
-            accessToken: null,
-            isLoggingError: false,
-            loggingErrorMessage: null
-        });
+    async logOut() {
+        try {
+            const response = await CallApi("/Account/Logout", "POST", this.state.accessToken);
+            if (response.ok) {
+                this.setState({
+                    isUserLogged: false,
+                    isUserLogging: false,
+                    userLogin: null,
+                    accessToken: null,
+                    isLoggingError: false,
+                    loggingErrorMessage: null
+                });
 
-        document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        document.cookie = "userLogin=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                document.cookie = "userLogin=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            }
+            else {
+                const result = await response.json();
+
+                this.setState({
+                    isUserLogging: false,
+                    isLoggingError: true,
+                    loggingErrorMessage: `${response.status} ${result.errorText}`
+                });
+            }
+        }
+        catch (error) {
+            console.log(error);
+            this.setState({
+                isUserLogging: false,
+                isLoggingError: true,
+                loggingErrorMessage: "Error: Unable to logout"
+            });
+        }
     }
 
     getAccessTokenFromCookies() {
