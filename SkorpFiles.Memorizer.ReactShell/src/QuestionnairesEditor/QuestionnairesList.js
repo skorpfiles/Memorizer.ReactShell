@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApiHostUrl } from '../GlobalConstants';
+import { CallApi } from '../GlobalUtilities';
 
 class QuestionnairesList extends React.Component {
     constructor(props) {
@@ -17,16 +17,8 @@ class QuestionnairesList extends React.Component {
     async componentDidMount() {
         try {
             const response =
-                await fetch(ApiHostUrl + "/Repository/Questionnaires",
-                    {
-                        method: "GET",
-                        headers: {
-                            'content-type': 'application/json;charset=UTF-8',
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin,Access-Control-Allow-Headers,content-type, Authorization',
-                            'Authorization': `Bearer ${this.props.accessToken}`
-                        }
-                    });
+                await CallApi("/Repository/Questionnaires", "GET", this.props.accessToken);
+
             if (response.ok) {
                 const result = await response.json();
 

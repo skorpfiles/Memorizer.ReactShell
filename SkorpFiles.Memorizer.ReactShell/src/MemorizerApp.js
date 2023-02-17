@@ -4,6 +4,7 @@ import UserInfoSection from './UserInfo/UserInfoSection';
 import EditorWorkspace from './QuestionnairesEditor/EditorWorkspace'
 import developerLogo from './skorpFilesLogo.png';
 import { ApiHostUrl, CookiesExpireDays } from './GlobalConstants';
+import { CallApi } from './GlobalUtilities';
 import { useState } from 'react';
 
 class MemorizerApp extends React.Component {
@@ -27,16 +28,8 @@ class MemorizerApp extends React.Component {
             if (accessTokenFromCookies != null && accessTokenFromCookies != "") {
                 var userLoginFromCookies = this.getUserLoginFromCookies();
                 const response =
-                    await fetch(ApiHostUrl + "/Account/Check",
-                        {
-                            method: "GET",
-                            headers: {
-                                'content-type': 'application/json;charset=UTF-8',
-                                'Access-Control-Allow-Origin': '*',
-                                'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin,Access-Control-Allow-Headers,content-type, Authorization',
-                                'Authorization': `Bearer ${accessTokenFromCookies}`
-                            }
-                        });
+                    await CallApi("/Account/Check", "GET", accessTokenFromCookies);
+
                 if (response.ok) {
                     this.setState({
                         isUserLogged: true,
@@ -110,16 +103,7 @@ class MemorizerApp extends React.Component {
             });
 
             const response =
-                await fetch(ApiHostUrl + "/Account/Token",
-                    {
-                        method: "POST",
-                        body: JSON.stringify({ login, password }),
-                        headers: {
-                            'content-type': 'application/json;charset=UTF-8',
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin,Access-Control-Allow-Headers,content-type'
-                        }
-                    });
+                await CallApi("/Account/Token", "POST", null, JSON.stringify({ login, password }));
 
             if (response.ok) {
                 const result = await response.json();
@@ -160,7 +144,7 @@ class MemorizerApp extends React.Component {
                 userLogin: null,
                 accessToken: null,
                 isLoggingError: true,
-                loggingErrorMessage: "Error: Unable to connect to API"
+                loggingErrorMessage: "Error: Unable to connect to the API"
             });
         }
     }

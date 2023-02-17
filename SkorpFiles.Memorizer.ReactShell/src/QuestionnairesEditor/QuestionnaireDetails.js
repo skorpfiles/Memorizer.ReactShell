@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApiHostUrl } from '../GlobalConstants';
+import { CallApi } from '../GlobalUtilities';
 import Question from './Question.js';
 import EditButton from './EditButton.js';
 
@@ -35,16 +35,8 @@ class QuestionnairesDetails extends React.Component {
     async refresh() {
         try {
             const response1 =
-                await fetch(ApiHostUrl + "/Repository/Questions?questionnaireId=" + this.props.currentItem.id,
-                    {
-                        method: "GET",
-                        headers: {
-                            'content-type': 'application/json;charset=UTF-8',
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin,Access-Control-Allow-Headers,content-type, Authorization',
-                            'Authorization': `Bearer ${this.props.accessToken}`
-                        }
-                    });
+                await CallApi("/Repository/Questions?questionnaireId=" + this.props.currentItem.id, "GET", this.props.accessToken);
+
             if (response1.ok) {
                 const result = await response1.json();
 
