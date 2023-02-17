@@ -3,7 +3,7 @@ import './MemorizerApp.css';
 import UserInfoSection from './UserInfo/UserInfoSection';
 import EditorWorkspace from './QuestionnairesEditor/EditorWorkspace'
 import developerLogo from './skorpFilesLogo.png';
-import { ApiHostUrl } from './GlobalConstants';
+import { ApiHostUrl, CookiesExpireDays } from './GlobalConstants';
 import { useState } from 'react';
 
 class MemorizerApp extends React.Component {
@@ -24,7 +24,7 @@ class MemorizerApp extends React.Component {
     async componentDidMount() {
         try {
             var accessTokenFromCookies = this.getAccessTokenFromCookies();
-            if (accessTokenFromCookies != null) {
+            if (accessTokenFromCookies != null && accessTokenFromCookies != "") {
                 var userLoginFromCookies = this.getUserLoginFromCookies();
                 const response =
                     await fetch(ApiHostUrl + "/Account/Check",
@@ -124,7 +124,11 @@ class MemorizerApp extends React.Component {
             if (response.ok) {
                 const result = await response.json();
 
-                document.cookie = "accessToken=" + result.accessToken + "; userLogin=" + result.userLogin + "; ";
+                var expirationDate1 = new Date();
+                expirationDate1.setDate(expirationDate1.getDate() + CookiesExpireDays);
+
+                document.cookie = "accessToken=" + result.accessToken + "; expires=" + expirationDate1 + "; ";
+                document.cookie = "userLogin=" + result.login + "; expires=" + expirationDate1 + "; ";
 
                 this.setState({
                     isUserLogged: true,
@@ -170,6 +174,9 @@ class MemorizerApp extends React.Component {
             isLoggingError: false,
             loggingErrorMessage: null
         });
+
+        document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "userLogin=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     }
 
     getAccessTokenFromCookies() {
