@@ -1,7 +1,7 @@
 import React from 'react';
 import { CallApi } from '../GlobalUtilities';
 import Question from './Question.js';
-import EditButton from './EditButton.js';
+import EditButton from './QuestionButton.js';
 
 class QuestionnairesDetails extends React.Component {
     constructor(props) {
@@ -11,8 +11,12 @@ class QuestionnairesDetails extends React.Component {
             questionsIsLoading: true,
             questionsIsLoaded: false,
             questionsLoadedError: false,
-            questionsLoadingErrorText: ''
+            questionsLoadingErrorText: '',
+            isInEditorMode: false,
+            editingQuestionId: null
         };
+        this.chooseQuestionToEdit = this.chooseQuestionToEdit.bind(this);
+        this.cancelQuestionToEdit = this.cancelQuestionToEdit.bind(this);
     }
 
     async componentDidMount() {
@@ -81,7 +85,7 @@ class QuestionnairesDetails extends React.Component {
                 questionsField = this.state.questions.map(item =>
                 (
                     <div key={item.id}>
-                        <Question item={item}/>
+                        <Question item={item} controlsBlocked={this.state.isInEditorMode} isInEditorMode={this.state.editingQuestionId == item.id} doEdit={this.chooseQuestionToEdit} cancelEdit={this.cancelQuestionToEdit} />
                     </div>
                 )
                 )
@@ -102,6 +106,20 @@ class QuestionnairesDetails extends React.Component {
                     {questionsField}
                 </div>
             </div>);
+    }
+
+    chooseQuestionToEdit(id) {
+        this.setState({
+            isInEditorMode: true,
+            editingQuestionId: id
+        });
+    }
+
+    cancelQuestionToEdit() {
+        this.setState({
+            isInEditorMode: false,
+            editingQuestionId: null
+        });
     }
 }
 
