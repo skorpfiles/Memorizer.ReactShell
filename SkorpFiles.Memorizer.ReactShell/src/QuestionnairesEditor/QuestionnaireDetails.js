@@ -140,11 +140,7 @@ class QuestionnairesDetails extends React.Component {
             var body_editQuestion = {
                 questionnaireId: this.props.currentItem.id,
                 updatedQuestions: [
-                    {
-                        id: item.id,
-                        text: item.text,
-                        untypedAnswer: item.untypedAnswer
-                    }
+                    item
                 ]
             };
 

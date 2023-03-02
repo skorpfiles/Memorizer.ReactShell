@@ -83,9 +83,17 @@ class Question extends React.Component {
                                 </div>
                                 <div style={{display:"flex"}}>
                                     <QuestionButton itemId={this.props.item.id} icon={saveIcon} altText="save" buttonKey="save" doAction={() => {
-                                        this.props.item.text = document.getElementById('questionText').value;
-                                        this.props.item.untypedAnswer = document.getElementById('untypedAnswer').value;
-                                        return this.props.saveChanges(this.props.item);
+                                        var newItem = {
+                                            id: this.props.item.id,
+                                            type: this.props.item.type,
+                                            text: document.getElementById('questionText').value,
+                                            untypedAnswer: document.getElementById('untypedAnswer').value,
+                                            typedAnswers: this.props.item.typedAnswers,
+                                            estimatedTrainingTimeSeconds: this.props.item.estimatedTrainingTimeSeconds,
+                                            enabled: this.props.item.enabled,
+                                            reference: this.props.item.reference
+                                        };
+                                        return this.props.saveChanges(newItem);
                                     }
                                     } />
                                     <QuestionButton itemId={this.props.item.id} icon={deleteIcon} altText="delete" buttonKey="delete" />
