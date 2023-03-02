@@ -4,6 +4,7 @@ import editIcon from './edit.png';
 import closeIcon from './close.png';
 import deleteIcon from './delete.png';
 import saveIcon from './floppy_save_guardar.png';
+import TextareaAutosize from 'react-textarea-autosize';
 
 class Question extends React.Component {
     constructor(props) {
@@ -37,7 +38,7 @@ class Question extends React.Component {
                                 </div>
                                 <div>
                                     {this.state.mouseOnElement && (
-                                    <QuestionButton itemId={this.props.item.id} doAction={this.props.doEdit} icon={editIcon} altText="edit" buttonKey="edit" />
+                                        <QuestionButton itemId={this.props.item.id} doAction={()=>this.props.doEdit(this.props.item.id)} icon={editIcon} altText="edit" buttonKey="edit" />
                                     )}
                                 </div>
                             </div>
@@ -78,19 +79,24 @@ class Question extends React.Component {
                         <div style={{ display: "table-cell", padding: "10px" }}>
                             <div style={{ width: "100%", display: "flex" }} >
                                 <div style={{ flex: "1 0 auto" }} >
-                                    <em>{this.props.item.text}</em>
+                                    <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily:"Arial" }} id="questionText" name="questionText">{this.props.item.text}</TextareaAutosize>
                                 </div>
                                 <div style={{display:"flex"}}>
-                                    <QuestionButton itemId={this.props.item.id} icon={saveIcon} altText="save" buttonKey="save" />
+                                    <QuestionButton itemId={this.props.item.id} icon={saveIcon} altText="save" buttonKey="save" doAction={() => {
+                                        this.props.item.text = document.getElementById('questionText').value;
+                                        this.props.item.untypedAnswer = document.getElementById('untypedAnswer').value;
+                                        return this.props.saveChanges(this.props.item);
+                                    }
+                                    } />
                                     <QuestionButton itemId={this.props.item.id} icon={deleteIcon} altText="delete" buttonKey="delete" />
-                                    <QuestionButton itemId={this.props.item.id} icon={closeIcon} altText="close" buttonKey="close" doAction={this.props.cancelEdit} />
+                                    <QuestionButton itemId={this.props.item.id} icon={closeIcon} altText="close" buttonKey="close" doAction={()=>this.props.cancelEdit()} />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div style={{ display: "table-row", backgroundColor: "white" }}>
                         <div style={{ display: "table-cell", padding: "10px" }} >
-                            <em>{this.props.item.untypedAnswer}</em>
+                            <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="untypedAnswer" name="untypedAnswer">{this.props.item.untypedAnswer}</TextareaAutosize>
                         </div>
                     </div>
                     {(this.props.item.typedAnswers != null && this.props.item.typedAnswers.length != 0) && (

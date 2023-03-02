@@ -7,7 +7,7 @@ class QuestionButton extends React.Component {
 
     render() {
         return (
-            <div style={{margin:"0 2px"}} onClick={() => this.props.doAction(this.props.itemId)}>
+            <div style={{margin:"0 2px"}} onClick={this.props.doAction}>
                 <a href="#" key={this.props.itemId + "-" + this.props.buttonKey}>
                     <img src={this.props.icon} alt={this.props.altText} width="16px" />
                 </a>

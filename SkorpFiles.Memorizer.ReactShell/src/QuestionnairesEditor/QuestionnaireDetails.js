@@ -13,10 +13,13 @@ class QuestionnairesDetails extends React.Component {
             questionsLoadedError: false,
             questionsLoadingErrorText: '',
             isInEditorMode: false,
-            editingQuestionId: null
+            editingQuestionId: null,
+            editingQuestionError: false,
+            editingQuestionErrorText:''
         };
         this.chooseQuestionToEdit = this.chooseQuestionToEdit.bind(this);
         this.cancelQuestionToEdit = this.cancelQuestionToEdit.bind(this);
+        this.editQuestion = this.editQuestion.bind(this);
     }
 
     async componentDidMount() {
@@ -85,7 +88,13 @@ class QuestionnairesDetails extends React.Component {
                 questionsField = this.state.questions.map(item =>
                 (
                     <div key={item.id}>
-                        <Question item={item} controlsBlocked={this.state.isInEditorMode} isInEditorMode={this.state.editingQuestionId == item.id} doEdit={this.chooseQuestionToEdit} cancelEdit={this.cancelQuestionToEdit} />
+                        <Question
+                            item={item}
+                            controlsBlocked={this.state.isInEditorMode}
+                            isInEditorMode={this.state.editingQuestionId == item.id}
+                            doEdit={this.chooseQuestionToEdit}
+                            cancelEdit={this.cancelQuestionToEdit}
+                            saveChanges={this.editQuestion} />
                     </div>
                 )
                 )
@@ -111,15 +120,63 @@ class QuestionnairesDetails extends React.Component {
     chooseQuestionToEdit(id) {
         this.setState({
             isInEditorMode: true,
-            editingQuestionId: id
+            editingQuestionId: id,
+            editingQuestionError: false,
+            editingQuestionErrorText: ''
         });
     }
 
     cancelQuestionToEdit() {
         this.setState({
             isInEditorMode: false,
-            editingQuestionId: null
+            editingQuestionId: null,
+            editingQuestionError: false,
+            editingQuestionErrorText: ''
         });
+    }
+
+    async editQuestion(item) {
+        try {
+            var body_editQuestion = {
+                questionnaireId: this.props.currentItem.id,
+                updatedQuestions: [
+                    {
+                        id: item.id,
+                        text: item.text,
+                        untypedAnswer: item.untypedAnswer
+                    }
+                ]
+            };
+
+            console.log(body_editQuestion);
+
+            const response_editQuestion = await CallApi("/Repository/Questions", "POST", this.props.accessToken, JSON.stringify(body_editQuestion));
+
+            if (response_editQuestion.ok) {
+                this.setState({
+                    isInEditorMode: false,
+                    editingQuestionId: null,
+                    editingQuestionError: false,
+                    editingQuestionErrorText: ''
+                });
+                await this.refresh();
+            }
+            else {
+                const result_editQuestion = await response_editQuestion.json();
+
+                this.setState({
+                    editingQuestionError: true,
+                    editingQuestionErrorText: `${response_editQuestion.status} ${result_editQuestion.errorText}`
+                });
+            }
+        }
+        catch(error) {
+            console.log(error);
+            this.setState({
+                editingQuestionError: true,
+                editingQuestionErrorText: "Error: Unable to save changes."
+            });
+        }
     }
 }
 
