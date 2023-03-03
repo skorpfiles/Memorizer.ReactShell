@@ -4,20 +4,27 @@ import editIcon from './edit.png';
 import closeIcon from './close.png';
 import deleteIcon from './delete.png';
 import saveIcon from './floppy_save_guardar.png';
+import addIcon from './add.png';
 import TextareaAutosize from 'react-textarea-autosize';
 
 class Question extends React.Component {
     constructor(props) {
         super(props);
         this.setMouseOnElementFlag = this.setMouseOnElementFlag.bind(this);
+        this.setMouseOnTypedAnswerFlag = this.setMouseOnTypedAnswerFlag.bind(this);
         this.state = {
-            mouseOnElement: false
+            mouseOnElement: false,
+            selectedTypedAnswerId: null
         }
     }
 
     setMouseOnElementFlag(param) {
         if ((param == true && !this.props.controlsBlocked) || param == false)
             this.setState({ mouseOnElement: param });
+    }
+
+    setMouseOnTypedAnswerFlag(typedAnswerId) {
+        this.setState({ selectedTypedAnswerId: typedAnswerId });
     }
 
     render() {
@@ -71,10 +78,7 @@ class Question extends React.Component {
         else {
             result =
                 (
-                <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#E6E6FA", fontFamily: "Arial" }}
-                    onMouseEnter={() => this.setMouseOnElementFlag(true)}
-                    onMouseLeave={() => this.setMouseOnElementFlag(false)}
-                >
+                <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#E6E6FA", fontFamily: "Arial" }}>
                     <div style={{ display: "table-row", fontSize: "1.5em" }}>
                         <div style={{ display: "table-cell", padding: "10px" }}>
                             <div style={{ width: "100%", display: "flex" }} >
@@ -107,22 +111,55 @@ class Question extends React.Component {
                             <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="untypedAnswer" name="untypedAnswer">{this.props.item.untypedAnswer}</TextareaAutosize>
                         </div>
                     </div>
-                    {(this.props.item.typedAnswers != null && this.props.item.typedAnswers.length != 0) && (
                     <div style={{ display: "table-row", backgroundColor: "white" }}>
-                            <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
-                                <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                    {this.props.item.typedAnswers.map(ans =>
-                                    (
-                                        <div key={ans.id} style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 10px 5px", padding: "2px" }}>
-                                            <em>{ans.text}</em>
-                                        </div>
-                                    )
-                                    )}
+                        <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
+                            <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                {this.props.item.typedAnswers.map(ans =>
+                                (
+                                    <div key={ans.id}
+                                        style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 10px 5px", padding: "2px",position: "relative" }}
+                                        onMouseEnter={() => this.setMouseOnTypedAnswerFlag(ans.id)}
+                                        onMouseLeave={() => this.setMouseOnTypedAnswerFlag(null)}
+                                    >
+                                        <em>{ans.text}</em>
+                                        {(this.state.selectedTypedAnswerId == ans.id) && (
+                                            <div style={{
+                                                position: "absolute",
+                                                top: "0",
+                                                left: "0",
+                                                width: "100%",
+                                                height: "100%",
+                                                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                                                borderRadius: "5px"
+                                            }}>
+                                            </div>
+                                        )
+                                        }
+                                        {(this.state.selectedTypedAnswerId == ans.id) && (
+                                            
+                                            <div style={{
+                                                position: "absolute",
+                                                top: "50%",
+                                                left: "50%",
+                                                transform: "translate(-50%, -50%)",
+                                            }}>
+                                                <a href="#">
+                                                    <img src={deleteIcon} alt="Delete the typed answer" width="12px" />
+                                                </a>
+                                            </div>
+                                        )
+                                        }
+                                    </div>
+                                )
+                                )}
+                                <div style={{ margin: "0 5px 10px 5px", padding: "2px", border: "1px solid black", borderRadius: "5px" }}>
+                                    <a href="#">
+                                        <img src={addIcon} alt="Add a typed answer" width="12px" />
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                    )
-                    }
+                    </div>
                 </div>
                 );
         }
