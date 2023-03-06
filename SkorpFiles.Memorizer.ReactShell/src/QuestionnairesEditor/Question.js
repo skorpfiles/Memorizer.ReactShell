@@ -14,6 +14,7 @@ class Question extends React.Component {
         this.setMouseOnTypedAnswerFlag = this.setMouseOnTypedAnswerFlag.bind(this);
         this.state = {
             mouseOnElement: false,
+            itemWithChanges: null,
             selectedTypedAnswerId: null
         }
     }
@@ -45,16 +46,36 @@ class Question extends React.Component {
                                 </div>
                                 <div>
                                     {this.state.mouseOnElement && (
-                                        <QuestionButton itemId={this.props.item.id} doAction={()=>this.props.doEdit(this.props.item.id)} icon={editIcon} altText="edit" buttonKey="edit" />
+                                        <QuestionButton itemId={this.props.item.id} doAction={() =>
+                                            {
+                                                this.setState({
+                                                    itemWithChanges: {
+                                                        id: this.props.item.id,
+                                                        type: this.props.item.type,
+                                                        text: this.props.item.text,
+                                                        untypedAnswer: this.props.item.untypedAnswer,
+                                                        typedAnswers: this.props.item.typedAnswers,
+                                                        estimatedTrainingTimeSeconds: this.props.item.estimatedTrainingTimeSeconds,
+                                                        enabled: this.props.item.enabled,
+                                                        reference: this.props.item.reference
+                                                    }
+                                                });
+                                                this.props.doEdit(this.props.item.id);
+                                            }
+                                        } icon={editIcon} altText="edit" buttonKey="edit" />
                                     )}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                     <div style={{ display: "table-row" }}>
                         <div style={{ display: "table-cell", padding: "10px" }} >
-                            <em>{this.props.item.untypedAnswer}</em>
+                            {this.props.item.type != "task" && (
+                                <em>{this.props.item.untypedAnswer}</em>
+                            )}
+                            {this.props.item.type == "task" && (
+                                <em><span style={{ color: "gray" }} >Task</span></em>
+                            )}
                         </div>
                     </div>
                     {(this.props.item.typedAnswers != null && this.props.item.typedAnswers.length != 0) && (
@@ -84,19 +105,19 @@ class Question extends React.Component {
                         <div style={{ display: "table-cell", padding: "10px" }}>
                             <div style={{ width: "100%", display: "flex" }} >
                                 <div style={{ flex: "1 0 auto" }} >
-                                    <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily:"Arial" }} id="questionText" name="questionText">{this.props.item.text}</TextareaAutosize>
+                                    <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="questionText" name="questionText">{this.state.itemWithChanges.text}</TextareaAutosize>
                                 </div>
                                 <div style={{display:"flex"}}>
                                     <QuestionButton itemId={this.props.item.id} icon={saveIcon} altText="save" buttonKey="save" doAction={() => {
                                         var newItem = {
-                                            id: this.props.item.id,
-                                            type: this.props.item.type,
+                                            id: this.state.itemWithChanges.id,
+                                            type: this.state.itemWithChanges.type,
                                             text: document.getElementById('questionText').value,
                                             untypedAnswer: document.getElementById('untypedAnswer').value,
-                                            typedAnswers: this.props.item.typedAnswers.map(typedAnswer => typedAnswer.text),
-                                            estimatedTrainingTimeSeconds: this.props.item.estimatedTrainingTimeSeconds,
-                                            enabled: this.props.item.enabled,
-                                            reference: this.props.item.reference
+                                            typedAnswers: this.state.itemWithChanges.typedAnswers.map(typedAnswer => typedAnswer.text),
+                                            estimatedTrainingTimeSeconds: this.state.itemWithChanges.estimatedTrainingTimeSeconds,
+                                            enabled: this.state.itemWithChanges.enabled,
+                                            reference: this.state.itemWithChanges.reference
                                         };
                                         return this.props.saveChanges(newItem);
                                     }
@@ -109,13 +130,13 @@ class Question extends React.Component {
                     </div>
                     <div style={{ display: "table-row"}}>
                         <div style={{ display: "table-cell", padding: "10px" }} >
-                            <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="untypedAnswer" name="untypedAnswer">{this.props.item.untypedAnswer}</TextareaAutosize>
+                            <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="untypedAnswer" name="untypedAnswer">{this.state.itemWithChanges.untypedAnswer}</TextareaAutosize>
                         </div>
                     </div>
                     <div style={{ display: "table-row"}}>
                         <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
                             <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                {this.props.item.typedAnswers.map(ans =>
+                                {this.state.itemWithChanges.typedAnswers.map(ans =>
                                 (
                                     <div key={ans.id}
                                         style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 10px 5px", padding: "2px",position: "relative" }}
