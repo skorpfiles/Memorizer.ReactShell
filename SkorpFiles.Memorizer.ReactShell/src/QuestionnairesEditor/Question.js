@@ -33,11 +33,11 @@ class Question extends React.Component {
         if (!this.props.isInEditorMode) {
             result =
                 (
-                <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#6495ed", fontFamily: "Arial" }}
+                <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#87cefa", fontFamily: "Arial" }}
                     onMouseEnter={() => this.setMouseOnElementFlag(true)}
                     onMouseLeave={() => this.setMouseOnElementFlag(false)}
                 >
-                    <div style={{ display: "table-row", fontSize: "1.5em" }}>
+                    <div style={{ display: "table-row", fontSize: "1.5em", backgroundColor: "#6495ed" }}>
                         <div style={{ display: "table-cell", padding: "10px" }}>
                             <div style={{ width: "100%", display: "flex" }} >
                                 <div style={{ flex: "1 0 auto" }} >
@@ -51,13 +51,14 @@ class Question extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div style={{ display: "table-row", backgroundColor: "#87cefa" }}>
+                    
+                    <div style={{ display: "table-row" }}>
                         <div style={{ display: "table-cell", padding: "10px" }} >
                             <em>{this.props.item.untypedAnswer}</em>
                         </div>
                     </div>
                     {(this.props.item.typedAnswers != null && this.props.item.typedAnswers.length != 0) && (
-                        <div style={{ display: "table-row", backgroundColor: "#87cefa" }}>
+                        <div style={{ display: "table-row" }}>
                             <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
                                 <div style={{ display: "flex", flexWrap: "wrap" }}>
                                     {this.props.item.typedAnswers.map(ans =>
@@ -78,8 +79,8 @@ class Question extends React.Component {
         else {
             result =
                 (
-                <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#E6E6FA", fontFamily: "Arial" }}>
-                    <div style={{ display: "table-row", fontSize: "1.5em" }}>
+                <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "white", fontFamily: "Arial" }}>
+                    <div style={{ display: "table-row", fontSize: "1.5em", backgroundColor: "#E6E6FA" }}>
                         <div style={{ display: "table-cell", padding: "10px" }}>
                             <div style={{ width: "100%", display: "flex" }} >
                                 <div style={{ flex: "1 0 auto" }} >
@@ -92,7 +93,7 @@ class Question extends React.Component {
                                             type: this.props.item.type,
                                             text: document.getElementById('questionText').value,
                                             untypedAnswer: document.getElementById('untypedAnswer').value,
-                                            typedAnswers: this.props.item.typedAnswers,
+                                            typedAnswers: this.props.item.typedAnswers.map(typedAnswer => typedAnswer.text),
                                             estimatedTrainingTimeSeconds: this.props.item.estimatedTrainingTimeSeconds,
                                             enabled: this.props.item.enabled,
                                             reference: this.props.item.reference
@@ -106,12 +107,12 @@ class Question extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div style={{ display: "table-row", backgroundColor: "white" }}>
+                    <div style={{ display: "table-row"}}>
                         <div style={{ display: "table-cell", padding: "10px" }} >
                             <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="untypedAnswer" name="untypedAnswer">{this.props.item.untypedAnswer}</TextareaAutosize>
                         </div>
                     </div>
-                    <div style={{ display: "table-row", backgroundColor: "white" }}>
+                    <div style={{ display: "table-row"}}>
                         <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
                             <div style={{ display: "flex", flexWrap: "wrap" }}>
                                 {this.props.item.typedAnswers.map(ans =>
