@@ -6,12 +6,14 @@ import deleteIcon from './delete.png';
 import saveIcon from './floppy_save_guardar.png';
 import addIcon from './add.png';
 import TextareaAutosize from 'react-textarea-autosize';
+import { v4 as uuidv4 } from 'uuid';
 
 class Question extends React.Component {
     constructor(props) {
         super(props);
         this.setMouseOnElementFlag = this.setMouseOnElementFlag.bind(this);
         this.setMouseOnTypedAnswerFlag = this.setMouseOnTypedAnswerFlag.bind(this);
+        this.addTypedAnswer = this.addTypedAnswer.bind(this);
         this.state = {
             mouseOnElement: false,
             itemWithChanges: null,
@@ -26,6 +28,24 @@ class Question extends React.Component {
 
     setMouseOnTypedAnswerFlag(typedAnswerId) {
         this.setState({ selectedTypedAnswerId: typedAnswerId });
+    }
+
+    addTypedAnswer() {
+        let newTypedAnswerText = prompt("Type the answer text", "");
+        if (newTypedAnswerText != null && newTypedAnswerText != "") {
+            this.setState(prevState => ({
+                itemWithChanges: {
+                    ...prevState.itemWithChanges,
+                    typedAnswers: [
+                        ...prevState.itemWithChanges.typedAnswers,
+                        {
+                            id: uuidv4(),
+                            text: newTypedAnswerText
+                        }
+                    ]
+                }
+            }));
+        }
     }
 
     render() {
@@ -177,7 +197,7 @@ class Question extends React.Component {
                                         </div>
                                     )
                                     )}
-                                    <div style={{ margin: "0 5px 10px 5px", padding: "2px", border: "1px solid black", borderRadius: "5px" }}>
+                                    <div style={{ margin: "0 5px 10px 5px", padding: "2px", border: "1px solid black", borderRadius: "5px" }} onClick={()=>this.addTypedAnswer()}>
                                         <a href="#">
                                             <img src={addIcon} alt="Add a typed answer" width="12px" />
                                         </a>
