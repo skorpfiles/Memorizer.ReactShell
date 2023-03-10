@@ -14,6 +14,7 @@ class Question extends React.Component {
         this.setMouseOnElementFlag = this.setMouseOnElementFlag.bind(this);
         this.setMouseOnTypedAnswerFlag = this.setMouseOnTypedAnswerFlag.bind(this);
         this.addTypedAnswer = this.addTypedAnswer.bind(this);
+        this.deleteTypedAnswer = this.deleteTypedAnswer.bind(this);
         this.state = {
             mouseOnElement: false,
             itemWithChanges: null,
@@ -46,6 +47,15 @@ class Question extends React.Component {
                 }
             }));
         }
+    }
+
+    deleteTypedAnswer(id) {
+        this.setState(prevState => ({
+            itemWithChanges: {
+                ...prevState.itemWithChanges,
+                typedAnswers: prevState.itemWithChanges.typedAnswers.filter(ans => ans.id != id)
+                }
+            }))
     }
 
     render() {
@@ -187,7 +197,9 @@ class Question extends React.Component {
                                                     top: "50%",
                                                     left: "50%",
                                                     transform: "translate(-50%, -50%)",
-                                                }}>
+                                                }}
+                                                    onClick={() => this.deleteTypedAnswer(ans.id)}
+                                                >
                                                     <a href="#">
                                                         <img src={deleteIcon} alt="Delete the typed answer" width="12px" />
                                                     </a>
