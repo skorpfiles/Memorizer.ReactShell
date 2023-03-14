@@ -72,7 +72,7 @@ class Question extends React.Component {
                         <div style={{ display: "table-cell", padding: "10px" }}>
                             <div style={{ width: "100%", display: "flex" }} >
                                 <div style={{ flex: "1 0 auto" }} >
-                                    <em>{this.props.item.text}</em>
+                                    <em>{this.props.item.text} ({this.props.item.type})</em>
                                 </div>
                                 <div>
                                     {this.state.mouseOnElement && (
@@ -99,31 +99,44 @@ class Question extends React.Component {
                         </div>
                     </div>
                     <div style={{ display: "table-row" }}>
-                        <div style={{ display: "table-cell", padding: "10px" }} >
-                            {this.props.item.type != "task" && (
-                                <em>{this.props.item.untypedAnswer}</em>
-                            )}
-                            {this.props.item.type == "task" && (
-                                <em><span style={{ color: "gray" }} >Task</span></em>
-                            )}
-                        </div>
-                    </div>
-                    {(this.props.item.typedAnswers != null && this.props.item.typedAnswers.length != 0) && (
-                        <div style={{ display: "table-row" }}>
-                            <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
-                                <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                    {this.props.item.typedAnswers.map(ans =>
-                                    (
-                                        <div key={ans.id} style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 10px 5px", padding: "2px" }}>
-                                            <em>{ans.text}</em>
+                        <div style={{ display: "table-cell", padding:"10px 0" }}>
+                            <div style={{display:"table"}}>
+                                <div style={{ display: "table-row" }}>
+                                    {(this.props.item.type == "untypedAnswer" || this.props.item.type == "untypedAndTypedAnswers") && (
+                                        <div style={{ display: "table-cell", padding:"0 10px" }} >
+                                            <em>{this.props.item.untypedAnswer}</em>
                                         </div>
-                                    )
+                                    )}
+                                    {this.props.item.type == "task" && (
+                                        <div style={{ display: "table-cell", padding: "0 10px" }} >
+                                            <em><span style={{ color: "gray" }} >Task</span></em>
+                                        </div>
                                     )}
                                 </div>
+                                {(this.props.item.type == "untypedAndTypedAnswers") && (
+                                    <div style={{ display: "table-row" }}>
+                                        <div style={{ display: "table-cell", padding: "5px 0" }}></div>
+                                    </div>
+                                )}
+                                {((this.props.item.type == "typedAnswers" || this.props.item.type=="untypedAndTypedAnswers") && this.props.item.typedAnswers != null && this.props.item.typedAnswers.length != 0) && (
+                                    <div style={{ display: "table-row" }}>
+                                        <div style={{ display: "table-cell", padding: "0 5px" }} >
+                                            <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                                {this.props.item.typedAnswers.map(ans =>
+                                                (
+                                                    <div key={ans.id} style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 0 5px", padding: "2px" }}>
+                                                        <em>{ans.text}</em>
+                                                    </div>
+                                                )
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                                }
                             </div>
                         </div>
-                    )
-                    }
+                    </div>
                 </div>
                 );
         }
@@ -158,62 +171,75 @@ class Question extends React.Component {
                             </div>
                         </div>
                     </div>
-                    {(this.state.itemWithChanges.type == "untypedAnswer" || this.state.itemWithChanges.type == "untypedAndTypedAnswers") && (
+                    {(this.state.itemWithChanges.type != "task") && (
                         <div style={{ display: "table-row" }}>
-                            <div style={{ display: "table-cell", padding: "10px" }} >
-                                <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="untypedAnswer" name="untypedAnswer">{this.state.itemWithChanges.untypedAnswer}</TextareaAutosize>
-                            </div>
-                        </div>
-                    )}
-                    {(this.state.itemWithChanges.type == "typedAnswer" || this.state.itemWithChanges.type == "untypedAndTypedAnswers") && (
-                        <div style={{ display: "table-row" }}>
-                            <div style={{ display: "table-cell", padding: "0 5px 0 5px" }} >
-                                <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                    {this.state.itemWithChanges.typedAnswers.map(ans =>
-                                    (
-                                        <div key={ans.id}
-                                            style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 10px 5px", padding: "2px", position: "relative" }}
-                                            onMouseEnter={() => this.setMouseOnTypedAnswerFlag(ans.id)}
-                                            onMouseLeave={() => this.setMouseOnTypedAnswerFlag(null)}
-                                        >
-                                            <em>{ans.text}</em>
-                                            {(this.state.selectedTypedAnswerId == ans.id) && (
-                                                <div style={{
-                                                    position: "absolute",
-                                                    top: "0",
-                                                    left: "0",
-                                                    width: "100%",
-                                                    height: "100%",
-                                                    backgroundColor: "rgba(255, 255, 255, 0.7)",
-                                                    borderRadius: "5px"
-                                                }}>
-                                                </div>
-                                            )
-                                            }
-                                            {(this.state.selectedTypedAnswerId == ans.id) && (
-
-                                                <div style={{
-                                                    position: "absolute",
-                                                    top: "50%",
-                                                    left: "50%",
-                                                    transform: "translate(-50%, -50%)",
-                                                }}
-                                                    onClick={() => this.deleteTypedAnswer(ans.id)}
-                                                >
-                                                    <a href="#">
-                                                        <img src={deleteIcon} alt="Delete the typed answer" width="12px" />
-                                                    </a>
-                                                </div>
-                                            )
-                                            }
+                            <div style={{ display: "table-cell", padding: "10px 0" }}>
+                                <div style={{ display: "table" }}>
+                                    {(this.state.itemWithChanges.type == "untypedAnswer" || this.state.itemWithChanges.type == "untypedAndTypedAnswers") && (
+                                        <div style={{ display: "table-row" }}>
+                                            <div style={{ display: "table-cell", padding: "0 10px" }} >
+                                                <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="untypedAnswer" name="untypedAnswer">{this.state.itemWithChanges.untypedAnswer}</TextareaAutosize>
+                                            </div>
                                         </div>
-                                    )
                                     )}
-                                    <div style={{ margin: "0 5px 10px 5px", padding: "2px", border: "1px solid black", borderRadius: "5px" }} onClick={()=>this.addTypedAnswer()}>
-                                        <a href="#">
-                                            <img src={addIcon} alt="Add a typed answer" width="12px" />
-                                        </a>
-                                    </div>
+                                    {(this.props.item.type == "untypedAndTypedAnswers") && (
+                                        <div style={{ display: "table-row" }}>
+                                            <div style={{ display: "table-cell", padding: "5px 0" }}></div>
+                                        </div>
+                                    )}
+                                    {(this.state.itemWithChanges.type == "typedAnswers" || this.state.itemWithChanges.type == "untypedAndTypedAnswers") && (
+                                        <div style={{ display: "table-row" }}>
+                                            <div style={{ display: "table-cell", padding: "0 5px" }} >
+                                                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                                    {this.state.itemWithChanges.typedAnswers.map(ans =>
+                                                    (
+                                                        <div key={ans.id}
+                                                            style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 0 5px", padding: "2px", position: "relative" }}
+                                                            onMouseEnter={() => this.setMouseOnTypedAnswerFlag(ans.id)}
+                                                            onMouseLeave={() => this.setMouseOnTypedAnswerFlag(null)}
+                                                        >
+                                                            <em>{ans.text}</em>
+                                                            {(this.state.selectedTypedAnswerId == ans.id) && (
+                                                                <div style={{
+                                                                    position: "absolute",
+                                                                    top: "0",
+                                                                    left: "0",
+                                                                    width: "100%",
+                                                                    height: "100%",
+                                                                    backgroundColor: "rgba(255, 255, 255, 0.7)",
+                                                                    borderRadius: "5px"
+                                                                }}>
+                                                                </div>
+                                                            )
+                                                            }
+                                                            {(this.state.selectedTypedAnswerId == ans.id) && (
+
+                                                                <div style={{
+                                                                    position: "absolute",
+                                                                    top: "50%",
+                                                                    left: "50%",
+                                                                    transform: "translate(-50%, -50%)",
+                                                                }}
+                                                                    onClick={() => this.deleteTypedAnswer(ans.id)}
+                                                                >
+                                                                    <a href="#">
+                                                                        <img src={deleteIcon} alt="Delete the typed answer" width="12px" />
+                                                                    </a>
+                                                                </div>
+                                                            )
+                                                            }
+                                                        </div>
+                                                    )
+                                                    )}
+                                                    <div style={{ margin: "0 5px 0 5px", padding: "2px", border: "1px solid black", borderRadius: "5px" }} onClick={() => this.addTypedAnswer()}>
+                                                        <a href="#">
+                                                            <img src={addIcon} alt="Add a typed answer" width="12px" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
