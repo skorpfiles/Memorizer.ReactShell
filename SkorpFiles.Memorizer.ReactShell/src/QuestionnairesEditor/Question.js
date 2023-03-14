@@ -150,8 +150,21 @@ class Question extends React.Component {
                                 <div style={{ flex: "1 0 auto" }} >
                                     <TextareaAutosize style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }} id="questionText" name="questionText">{this.state.itemWithChanges.text}</TextareaAutosize>
                                 </div>
-                                <div style={{display:"flex"}}>
-                                    <QuestionButton itemId={this.props.item.id} icon={saveIcon} altText="save" buttonKey="save" doAction={() => {
+                                <div style={{ display: "flex" }}>
+                                    <select name="questionType" id="questionType" style={{ margin: "0 10px", height: "30px" }} value={this.state.itemWithChanges.type} onChange={(event) =>
+                                        this.setState({
+                                            itemWithChanges: {
+                                                ...this.state.itemWithChanges,
+                                                type: event.target.value
+                                            }
+                                        })
+                                    }>
+                                        <option value="task">Task</option>
+                                        <option value="untypedAnswer">Untyped answer</option>
+                                        <option value="typedAnswers">Typed answers</option>
+                                        <option value="untypedAndTypedAnswers">Untyped and typed answers</option>
+                                    </select>
+                                    <QuestionButton itemId={this.state.itemWithChanges.id} icon={saveIcon} altText="save" buttonKey="save" doAction={() => {
                                         var newItem = {
                                             id: this.state.itemWithChanges.id,
                                             type: this.state.itemWithChanges.type,
@@ -165,8 +178,8 @@ class Question extends React.Component {
                                         return this.props.saveChanges(newItem);
                                     }
                                     } />
-                                    <QuestionButton itemId={this.props.item.id} icon={deleteIcon} altText="delete" buttonKey="delete" />
-                                    <QuestionButton itemId={this.props.item.id} icon={closeIcon} altText="close" buttonKey="close" doAction={()=>this.props.cancelEdit()} />
+                                    <QuestionButton itemId={this.state.itemWithChanges.id} icon={deleteIcon} altText="delete" buttonKey="delete" />
+                                    <QuestionButton itemId={this.state.itemWithChanges.id} icon={closeIcon} altText="close" buttonKey="close" doAction={()=>this.props.cancelEdit()} />
                                 </div>
                             </div>
                         </div>
@@ -182,7 +195,7 @@ class Question extends React.Component {
                                             </div>
                                         </div>
                                     )}
-                                    {(this.props.item.type == "untypedAndTypedAnswers") && (
+                                    {(this.state.itemWithChanges.type == "untypedAndTypedAnswers") && (
                                         <div style={{ display: "table-row" }}>
                                             <div style={{ display: "table-cell", padding: "5px 0" }}></div>
                                         </div>
