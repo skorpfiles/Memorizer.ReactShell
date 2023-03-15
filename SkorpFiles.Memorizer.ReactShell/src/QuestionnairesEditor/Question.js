@@ -169,7 +169,7 @@ class Question extends React.Component {
                                             id: this.state.itemWithChanges.id,
                                             type: this.state.itemWithChanges.type,
                                             text: document.getElementById('questionText').value,
-                                            untypedAnswer: document.getElementById('untypedAnswer').value,
+                                            untypedAnswer: document.getElementById('untypedAnswer') != null ? document.getElementById('untypedAnswer').value : this.state.itemWithChanges.untypedAnswer,
                                             typedAnswers: this.state.itemWithChanges.typedAnswers.map(typedAnswer => typedAnswer.text),
                                             estimatedTrainingTimeSeconds: this.state.itemWithChanges.estimatedTrainingTimeSeconds,
                                             enabled: this.state.itemWithChanges.enabled,
