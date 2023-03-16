@@ -121,7 +121,7 @@ class Question extends React.Component {
                                 {((this.props.item.type == "typedAnswers" || this.props.item.type=="untypedAndTypedAnswers") && this.props.item.typedAnswers != null && this.props.item.typedAnswers.length != 0) && (
                                     <div style={{ display: "table-row" }}>
                                         <div style={{ display: "table-cell", padding: "0 5px" }} >
-                                            <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                            <div style={{ display: "flex", flexWrap: "wrap", rowGap: "5px" }}>
                                                 {this.props.item.typedAnswers.map(ans =>
                                                 (
                                                     <div key={ans.id} style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 0 5px", padding: "2px" }}>
@@ -203,7 +203,7 @@ class Question extends React.Component {
                                     {(this.state.itemWithChanges.type == "typedAnswers" || this.state.itemWithChanges.type == "untypedAndTypedAnswers") && (
                                         <div style={{ display: "table-row" }}>
                                             <div style={{ display: "table-cell", padding: "0 5px" }} >
-                                                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                                <div style={{ display: "flex", flexWrap: "wrap", rowGap:"5px" }}>
                                                     {this.state.itemWithChanges.typedAnswers.map(ans =>
                                                     (
                                                         <div key={ans.id}
@@ -257,6 +257,47 @@ class Question extends React.Component {
                             </div>
                         </div>
                     )}
+                    <div style={{ display: "table-row", backgroundColor:"#FFFFE0" }}>
+                        <div style={{ display: "table-cell", padding: "10px", fontSize: "1em" }}>
+                            <div style={{ display: "table", width:"100%" }}>
+                                <div style={{ display: "table-row" }}>
+                                    <div style={{ display: "flex", columnGap: "5px", verticalAlign: "center", alignItems:"stretch" }}>
+                                        <div>
+                                            <label for="reference">Reference:</label>
+                                        </div>
+                                        <div style={{ flexBasis: "auto", width:"100%"}}>
+                                            <TextareaAutosize style={{ width: "100%", resize: "none", overflow: "hidden", fontFamily: "Arial" }} id="reference" name="reference">{this.state.itemWithChanges.reference}</TextareaAutosize>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style={{ display: "table-row" }}>
+                                    <div style={{ width: "100%", display: "flex", flexWrap: "wrap", verticalAlign: "center", alignItems: "baseline", columnGap: "10px", padding: "10px 0 0 0" }}>
+                                        <div>
+                                            <input type="checkbox" id="questionEnabled" />
+                                            <label for="questionEnabled">Enabled</label>
+                                        </div>
+                                        <div>
+                                            <label for="estimatedTrainingTime">ETT:</label>
+                                            <input type="number" style={{width:"100px"}} id="estimatedTrainingTime"/>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" id="questionIsNew" />
+                                            <label for="questionIsNew">New</label>
+                                        </div>
+                                        <div>
+                                            <label for="rating">R:</label>
+                                            <input type="number" style={{ width: "50px" }} id="rating" />
+                                        </div>
+                                        <div>
+                                            <label for="penaltyPoints">PP:</label>
+                                            <input type="number" style={{ width: "50px" }} id="penaltyPoints" />
+                                        </div>
+                                        <div>ATT: {this.state.itemWithChanges.averageTrainingTimeSeconds ?? "-"}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 );
         }
