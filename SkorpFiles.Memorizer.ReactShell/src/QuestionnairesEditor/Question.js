@@ -15,6 +15,8 @@ class Question extends React.Component {
         this.setMouseOnTypedAnswerFlag = this.setMouseOnTypedAnswerFlag.bind(this);
         this.addTypedAnswer = this.addTypedAnswer.bind(this);
         this.deleteTypedAnswer = this.deleteTypedAnswer.bind(this);
+        this.handleEnabledCheckboxChange = this.handleEnabledCheckboxChange.bind(this);
+        this.handleEttChange = this.handleEttChange.bind(this);
         this.state = {
             mouseOnElement: false,
             itemWithChanges: null,
@@ -56,6 +58,24 @@ class Question extends React.Component {
                 typedAnswers: prevState.itemWithChanges.typedAnswers.filter(ans => ans.id != id)
                 }
             }))
+    }
+
+    handleEnabledCheckboxChange(event) {
+        this.setState(prevState=>({
+            itemWithChanges: {
+                ...prevState.itemWithChanges,
+                enabled:event.target.checked
+            }
+        }));
+    }
+
+    handleEttChange(event) {
+        this.setState(prevState => ({
+            itemWithChanges: {
+                ...prevState.itemWithChanges,
+                estimatedTrainingTimeSeconds: event.target.value
+            }
+        }));
     }
 
     render() {
@@ -152,12 +172,13 @@ class Question extends React.Component {
                                 </div>
                                 <div style={{ display: "flex" }}>
                                     <select name="questionType" id="questionType" style={{ margin: "0 10px", height: "30px" }} value={this.state.itemWithChanges.type} onChange={(event) =>
-                                        this.setState({
+                                        this.setState(prevState => ({
                                             itemWithChanges: {
-                                                ...this.state.itemWithChanges,
+                                                ...prevState.itemWithChanges,
                                                 type: event.target.value
                                             }
                                         })
+                                        )
                                     }>
                                         <option value="task">Task</option>
                                         <option value="untypedAnswer">Untyped answer</option>
@@ -273,26 +294,42 @@ class Question extends React.Component {
                                 <div style={{ display: "table-row" }}>
                                     <div style={{ width: "100%", display: "flex", flexWrap: "wrap", verticalAlign: "center", alignItems: "baseline", columnGap: "10px", padding: "10px 0 0 0" }}>
                                         <div>
-                                            <input type="checkbox" id="questionEnabled" />
+                                            <input type="checkbox" id="questionEnabled" checked={this.state.itemWithChanges.enabled} onChange={this.handleEnabledCheckboxChange} />
                                             <label for="questionEnabled">Enabled</label>
                                         </div>
                                         <div>
                                             <label for="estimatedTrainingTime">ETT:</label>
-                                            <input type="number" style={{width:"100px"}} id="estimatedTrainingTime"/>
+                                            <input type="number" style={{ width: "100px" }} id="estimatedTrainingTime" value={this.state.itemWithChanges.estimatedTrainingTimeSeconds} onChange={this.handleEttChange} />
                                         </div>
-                                        <div>
-                                            <input type="checkbox" id="questionIsNew" />
-                                            <label for="questionIsNew">New</label>
-                                        </div>
-                                        <div>
-                                            <label for="rating">R:</label>
-                                            <input type="number" style={{ width: "50px" }} id="rating" />
-                                        </div>
-                                        <div>
-                                            <label for="penaltyPoints">PP:</label>
-                                            <input type="number" style={{ width: "50px" }} id="penaltyPoints" />
-                                        </div>
-                                        <div>ATT: {this.state.itemWithChanges.averageTrainingTimeSeconds ?? "-"}</div>
+                                        {(this.state.itemWithChanges.myStatus != null) &&
+                                            (
+                                                <div>
+                                                    <input type="checkbox" id="questionIsNew" />
+                                                    <label for="questionIsNew">New</label>
+                                                </div>
+                                            )
+                                        }
+                                        {(this.state.itemWithChanges.myStatus != null) &&
+                                            (
+                                                <div>
+                                                    <label for="rating">R:</label>
+                                                    <input type="number" style={{ width: "50px" }} id="rating" />
+                                                </div>
+                                            )
+                                        }
+                                        {(this.state.itemWithChanges.myStatus != null) &&
+                                            (
+                                                <div>
+                                                    <label for="penaltyPoints">PP:</label>
+                                                    <input type="number" style={{ width: "50px" }} id="penaltyPoints" />
+                                                </div>
+                                            )
+                                        }
+                                        {(this.state.itemWithChanges.myStatus != null) &&
+                                            (
+                                                <div>ATT: {this.state.itemWithChanges.averageTrainingTimeSeconds ?? "-"}</div>
+                                            )
+                                        }
                                     </div>
                                 </div>
                             </div>
