@@ -13,9 +13,11 @@ class QuestionnairesDetails extends React.Component {
             questionsLoadedError: false,
             questionsLoadingErrorText: '',
             isInEditorMode: false,
+            itemWithChanges: null,
             editingQuestionId: null,
             editingQuestionError: false,
-            editingQuestionErrorText:''
+            editingQuestionErrorText: '',
+            addingQuestionEnabled: false,
         };
         this.chooseQuestionToEdit = this.chooseQuestionToEdit.bind(this);
         this.cancelQuestionToEdit = this.cancelQuestionToEdit.bind(this);
@@ -81,26 +83,43 @@ class QuestionnairesDetails extends React.Component {
 
     render() {
         var questionsField;
+        var addQuestion = (
+            <div style={{ width: "100%", margin: "10px 0px", padding: "5px 10px", border: "1px solid white", color: "white" }}>
+                <div>
+                    <a href="#" style={{ color: "white" }}>Add a question</a>
+                </div>
+            </div>);
         if (this.state.questionsIsLoading)
             questionsField = (<label style={{ color: "white" }}>Loading...</label>);
         else if (this.state.questionsIsLoaded) {
             if (this.state.questions.length != 0) {
-                questionsField = this.state.questions.map(item =>
-                (
-                    <div key={item.id}>
-                        <Question
-                            item={item}
-                            controlsBlocked={this.state.isInEditorMode}
-                            isInEditorMode={this.state.editingQuestionId == item.id}
-                            doEdit={this.chooseQuestionToEdit}
-                            cancelEdit={this.cancelQuestionToEdit}
-                            saveChanges={this.editQuestion} />
+                questionsField = (
+                    <div>
+                        {addQuestion}
+                        {this.state.questions.map(item =>
+                        (
+                            <div key={item.id}>
+                                <Question
+                                    item={item}
+                                    controlsBlocked={this.state.isInEditorMode}
+                                    isInEditorMode={this.state.editingQuestionId == item.id}
+                                    doEdit={this.chooseQuestionToEdit}
+                                    cancelEdit={this.cancelQuestionToEdit}
+                                    saveChanges={this.editQuestion} />
+                            </div>
+                        ))}
                     </div>
-                )
                 )
             }
             else {
-                questionsField = (<label style={{ color: "white" }}>No items.</label>);
+                questionsField = (
+                    <div>
+                        {addQuestion}
+                        <div>
+                            <label style={{ color: "white" }}>No items.</label>
+                        </div>
+                    </div>
+                );
             }
         }
         else if (this.state.questionsLoadedError)
@@ -173,6 +192,12 @@ class QuestionnairesDetails extends React.Component {
                 editingQuestionErrorText: "Error: Unable to save changes."
             });
         }
+    }
+
+    async startAddingQuestion() {
+        this.setState({
+            addingQuestionEnabled: true
+            })
     }
 }
 

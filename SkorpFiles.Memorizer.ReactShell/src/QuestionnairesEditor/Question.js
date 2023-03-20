@@ -17,6 +17,7 @@ class Question extends React.Component {
         this.deleteTypedAnswer = this.deleteTypedAnswer.bind(this);
         this.handleEnabledCheckboxChange = this.handleEnabledCheckboxChange.bind(this);
         this.handleEttChange = this.handleEttChange.bind(this);
+        this.handleReferenceChange = this.handleReferenceChange.bind(this);
         this.state = {
             mouseOnElement: false,
             itemWithChanges: null,
@@ -78,6 +79,15 @@ class Question extends React.Component {
         }));
     }
 
+    handleReferenceChange(event) {
+        this.setState(prevState => ({
+            itemWithChanges: {
+                ...prevState.itemWithChanges,
+                reference: event.target.value
+            }
+        }));
+    }
+
     render() {
         var result;
 
@@ -92,7 +102,7 @@ class Question extends React.Component {
                         <div style={{ display: "table-cell", padding: "10px" }}>
                             <div style={{ width: "100%", display: "flex" }} >
                                 <div style={{ flex: "1 0 auto" }} >
-                                    <em>{this.props.item.text} ({this.props.item.type})</em>
+                                    <em>{this.props.item.text}</em>
                                 </div>
                                 <div>
                                     {this.state.mouseOnElement && (
@@ -278,7 +288,7 @@ class Question extends React.Component {
                             </div>
                         </div>
                     )}
-                    <div style={{ display: "table-row", backgroundColor:"#FFFFE0" }}>
+                    <div style={{ display: "table-row", backgroundColor:"#E6E6FA" }}>
                         <div style={{ display: "table-cell", padding: "10px", fontSize: "1em" }}>
                             <div style={{ display: "table", width:"100%" }}>
                                 <div style={{ display: "table-row" }}>
@@ -286,8 +296,8 @@ class Question extends React.Component {
                                         <div>
                                             <label for="reference">Reference:</label>
                                         </div>
-                                        <div style={{ flexBasis: "auto", width:"100%"}}>
-                                            <TextareaAutosize style={{ width: "100%", resize: "none", overflow: "hidden", fontFamily: "Arial" }} id="reference" name="reference">{this.state.itemWithChanges.reference}</TextareaAutosize>
+                                        <div style={{ flexBasis: "auto", width: "100%" }}>
+                                            <TextareaAutosize style={{ width: "100%", resize: "none", overflow: "hidden", fontFamily: "Arial" }} id="reference" name="reference" value={this.state.itemWithChanges.reference} onChange={this.handleReferenceChange}></TextareaAutosize>
                                         </div>
                                     </div>
                                 </div>
