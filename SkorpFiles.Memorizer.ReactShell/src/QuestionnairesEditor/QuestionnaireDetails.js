@@ -2,6 +2,7 @@ import React from 'react';
 import { CallApi } from '../GlobalUtilities';
 import Question from './Question.js';
 import EditButton from './QuestionButton.js';
+import { v4 as uuidv4 } from 'uuid';
 
 class QuestionnairesDetails extends React.Component {
     constructor(props) {
@@ -13,15 +14,24 @@ class QuestionnairesDetails extends React.Component {
             questionsLoadedError: false,
             questionsLoadingErrorText: '',
             isInEditorMode: false,
-            itemWithChanges: null,
+            questionWithChanges: null,
             editingQuestionId: null,
             editingQuestionError: false,
             editingQuestionErrorText: '',
             addingQuestionEnabled: false,
         };
-        this.chooseQuestionToEdit = this.chooseQuestionToEdit.bind(this);
         this.cancelQuestionToEdit = this.cancelQuestionToEdit.bind(this);
-        this.editQuestion = this.editQuestion.bind(this);
+        this.addTypedAnswer = this.addTypedAnswer.bind(this);
+        this.deleteTypedAnswer = this.deleteTypedAnswer.bind(this);
+        this.handleEnabledCheckboxChange = this.handleEnabledCheckboxChange.bind(this);
+        this.handleEttChange = this.handleEttChange.bind(this);
+        this.handleReferenceChange = this.handleReferenceChange.bind(this);
+        this.handleQuestionTypeChange = this.handleQuestionTypeChange.bind(this);
+        this.handleQuestionTextChange = this.handleQuestionTextChange.bind(this);
+        this.handleQuestionUntypedAnswerChange = this.handleQuestionUntypedAnswerChange.bind(this);
+        this.startEditingQuestion = this.startEditingQuestion.bind(this);
+        this.saveEditingQuestion = this.saveEditingQuestion.bind(this);
+
     }
 
     async componentDidMount() {
@@ -100,12 +110,22 @@ class QuestionnairesDetails extends React.Component {
                         (
                             <div key={item.id}>
                                 <Question
-                                    item={item}
+                                    item={this.state.editingQuestionId != item.id ? item : this.state.questionWithChanges}
+                                    itemWithChanges={this.state.questionWithChanges}
                                     controlsBlocked={this.state.isInEditorMode}
                                     isInEditorMode={this.state.editingQuestionId == item.id}
-                                    doEdit={this.chooseQuestionToEdit}
+                                    startEditingQuestion={this.startEditingQuestion}
                                     cancelEdit={this.cancelQuestionToEdit}
-                                    saveChanges={this.editQuestion} />
+                                    handleQuestionTextChange={this.handleQuestionTextChange}
+                                    handleQuestionUntypedAnswerChange={this.handleQuestionUntypedAnswerChange}
+                                    handleQuestionTypeChange={this.handleQuestionTypeChange}
+                                    handleReferenceChange={this.handleReferenceChange}
+                                    handleEnabledCheckboxChange={this.handleEnabledCheckboxChange}
+                                    handleEttChange={this.handleEttChange}
+                                    saveEditingQuestion={this.saveEditingQuestion}
+                                    addTypedAnswer={this.addTypedAnswer}
+                                    deleteTypedAnswer={this.deleteTypedAnswer}
+                                />
                             </div>
                         ))}
                     </div>
@@ -136,15 +156,6 @@ class QuestionnairesDetails extends React.Component {
             </div>);
     }
 
-    chooseQuestionToEdit(id) {
-        this.setState({
-            isInEditorMode: true,
-            editingQuestionId: id,
-            editingQuestionError: false,
-            editingQuestionErrorText: ''
-        });
-    }
-
     cancelQuestionToEdit() {
         this.setState({
             isInEditorMode: false,
@@ -154,12 +165,23 @@ class QuestionnairesDetails extends React.Component {
         });
     }
 
-    async editQuestion(item) {
+    async saveEditingQuestion() {
         try {
+            var newItem = {
+                id: this.state.questionWithChanges.id,
+                type: this.state.questionWithChanges.type,
+                text: this.state.questionWithChanges.text,
+                untypedAnswer: this.state.questionWithChanges.untypedAnswer,
+                typedAnswers: this.state.questionWithChanges.typedAnswers.map(typedAnswer => typedAnswer.text),
+                estimatedTrainingTimeSeconds: this.state.questionWithChanges.estimatedTrainingTimeSeconds,
+                enabled: this.state.questionWithChanges.enabled,
+                reference: this.state.questionWithChanges.reference
+            };
+
             var body_editQuestion = {
                 questionnaireId: this.props.currentItem.id,
                 updatedQuestions: [
-                    item
+                    newItem
                 ]
             };
 
@@ -192,6 +214,106 @@ class QuestionnairesDetails extends React.Component {
                 editingQuestionErrorText: "Error: Unable to save changes."
             });
         }
+    }
+
+    addTypedAnswer() {
+        let newTypedAnswerText = prompt("Type the answer text", "");
+        if (newTypedAnswerText != null && newTypedAnswerText != "") {
+            this.setState(prevState => ({
+                questionWithChanges: {
+                    ...prevState.questionWithChanges,
+                    typedAnswers: [
+                        ...prevState.questionWithChanges.typedAnswers,
+                        {
+                            id: uuidv4(),
+                            text: newTypedAnswerText
+                        }
+                    ]
+                }
+            }));
+        }
+    }
+
+    deleteTypedAnswer(id) {
+        this.setState(prevState => ({
+            questionWithChanges: {
+                ...prevState.questionWithChanges,
+                typedAnswers: prevState.questionWithChanges.typedAnswers.filter(ans => ans.id != id)
+            }
+        }))
+    }
+
+    handleEnabledCheckboxChange(event) {
+        this.setState(prevState => ({
+            questionWithChanges: {
+                ...prevState.questionWithChanges,
+                enabled: event.target.checked
+            }
+        }));
+    }
+
+    handleEttChange(event) {
+        this.setState(prevState => ({
+            questionWithChanges: {
+                ...prevState.questionWithChanges,
+                estimatedTrainingTimeSeconds: event.target.value
+            }
+        }));
+    }
+
+    handleReferenceChange(event) {
+        this.setState(prevState => ({
+            questionWithChanges: {
+                ...prevState.questionWithChanges,
+                reference: event.target.value
+            }
+        }));
+    }
+
+    handleQuestionTypeChange(event) {
+        this.setState(prevState => ({
+            questionWithChanges: {
+                ...prevState.questionWithChanges,
+                type: event.target.value
+            }
+        }))
+    }
+
+    handleQuestionTextChange(event) {
+        this.setState(prevState => ({
+            questionWithChanges: {
+                ...prevState.questionWithChanges,
+                text: event.target.value
+            }
+        }))
+    }
+
+    handleQuestionUntypedAnswerChange(event) {
+        this.setState(prevState => ({
+            questionWithChanges: {
+                ...prevState.questionWithChanges,
+                untypedAnswer: event.target.value
+            }
+        }))
+    }
+
+    startEditingQuestion(item) {
+        this.setState({
+            questionWithChanges: {
+                id: item.id,
+                type: item.type,
+                text: item.text,
+                untypedAnswer: item.untypedAnswer,
+                typedAnswers: item.typedAnswers,
+                estimatedTrainingTimeSeconds: item.estimatedTrainingTimeSeconds,
+                enabled: item.enabled,
+                reference: item.reference
+            },
+            isInEditorMode: true,
+            editingQuestionId: item.id,
+            editingQuestionError: false,
+            editingQuestionErrorText: ''
+        });
     }
 
     async startAddingQuestion() {
