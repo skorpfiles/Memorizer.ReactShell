@@ -94,7 +94,7 @@ class QuestionnairesDetails extends React.Component {
     render() {
         var questionsField;
         var addQuestion = (
-            <div style={{ width: "100%", margin: "10px 0px", padding: "5px 10px", border: "1px solid white", color: "white" }}>
+            <div style={{ width: "100%", margin: "10px 0px", padding: "5px 10px", border: "1px solid white", color: "white", display: "flex", flexWrap: "wrap" }}>
                 <div>
                     <a href="#" style={{ color: "white" }}>Add a question</a>
                 </div>
@@ -111,7 +111,6 @@ class QuestionnairesDetails extends React.Component {
                             <div key={item.id}>
                                 <Question
                                     item={this.state.editingQuestionId != item.id ? item : this.state.questionWithChanges}
-                                    itemWithChanges={this.state.questionWithChanges}
                                     controlsBlocked={this.state.isInEditorMode}
                                     isInEditorMode={this.state.editingQuestionId == item.id}
                                     startEditingQuestion={this.startEditingQuestion}

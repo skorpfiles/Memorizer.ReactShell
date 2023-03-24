@@ -105,51 +105,51 @@ class Question extends React.Component {
                                         style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }}
                                         id="questionText"
                                         name="questionText"
-                                        value={this.props.itemWithChanges.text}
+                                        value={this.props.item.text}
                                         onChange={(event) => this.props.handleQuestionTextChange(event)}
                                     />
                                 </div>
                                 <div style={{ display: "flex" }}>
-                                    <select name="questionType" id="questionType" style={{ margin: "0 10px", height: "30px" }} value={this.props.itemWithChanges.type} onChange={(event) => this.props.handleQuestionTypeChange(event)}>
+                                    <select name="questionType" id="questionType" style={{ margin: "0 10px", height: "30px" }} value={this.props.item.type} onChange={(event) => this.props.handleQuestionTypeChange(event)}>
                                         <option value="task">Task</option>
                                         <option value="untypedAnswer">Untyped answer</option>
                                         <option value="typedAnswers">Typed answers</option>
                                         <option value="untypedAndTypedAnswers">Untyped and typed answers</option>
                                     </select>
-                                    <QuestionButton itemId={this.props.itemWithChanges.id} icon={saveIcon} altText="save" buttonKey="save" doAction={()=>this.props.saveEditingQuestion()} />
-                                    <QuestionButton itemId={this.props.itemWithChanges.id} icon={deleteIcon} altText="delete" buttonKey="delete" />
-                                    <QuestionButton itemId={this.props.itemWithChanges.id} icon={closeIcon} altText="close" buttonKey="close" doAction={()=>this.props.cancelEdit()} />
+                                    <QuestionButton itemId={this.props.item.id} icon={saveIcon} altText="save" buttonKey="save" doAction={()=>this.props.saveEditingQuestion()} />
+                                    <QuestionButton itemId={this.props.item.id} icon={deleteIcon} altText="delete" buttonKey="delete" />
+                                    <QuestionButton itemId={this.props.item.id} icon={closeIcon} altText="close" buttonKey="close" doAction={()=>this.props.cancelEdit()} />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {(this.props.itemWithChanges.type != "task") && (
+                    {(this.props.item.type != "task") && (
                         <div style={{ display: "table-row" }}>
                             <div style={{ display: "table-cell", padding: "10px 0" }}>
                                 <div style={{ display: "table" }}>
-                                    {(this.props.itemWithChanges.type == "untypedAnswer" || this.props.itemWithChanges.type == "untypedAndTypedAnswers") && (
+                                    {(this.props.item.type == "untypedAnswer" || this.props.item.type == "untypedAndTypedAnswers") && (
                                         <div style={{ display: "table-row" }}>
                                             <div style={{ display: "table-cell", padding: "0 10px" }} >
                                                 <TextareaAutosize
                                                     style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }}
                                                     id="untypedAnswer"
                                                     name="untypedAnswer"
-                                                    value={this.props.itemWithChanges.untypedAnswer}
+                                                    value={this.props.item.untypedAnswer}
                                                     onChange={(event) => this.props.handleQuestionUntypedAnswerChange(event)}
                                                 />
                                             </div>
                                         </div>
                                     )}
-                                    {(this.props.itemWithChanges.type == "untypedAndTypedAnswers") && (
+                                    {(this.props.item.type == "untypedAndTypedAnswers") && (
                                         <div style={{ display: "table-row" }}>
                                             <div style={{ display: "table-cell", padding: "5px 0" }}></div>
                                         </div>
                                     )}
-                                    {(this.props.itemWithChanges.type == "typedAnswers" || this.props.itemWithChanges.type == "untypedAndTypedAnswers") && (
+                                    {(this.props.item.type == "typedAnswers" || this.props.item.type == "untypedAndTypedAnswers") && (
                                         <div style={{ display: "table-row" }}>
                                             <div style={{ display: "table-cell", padding: "0 5px" }} >
                                                 <div style={{ display: "flex", flexWrap: "wrap", rowGap:"5px" }}>
-                                                    {this.props.itemWithChanges.typedAnswers.map(ans =>
+                                                    {this.props.item.typedAnswers.map(ans =>
                                                     (
                                                         <div key={ans.id}
                                                             style={{ border: "1px solid black", borderRadius: "5px", margin: "0 5px 0 5px", padding: "2px", position: "relative" }}
@@ -215,7 +215,7 @@ class Question extends React.Component {
                                                 style={{ width: "100%", resize: "none", overflow: "hidden", fontFamily: "Arial" }}
                                                 id="reference"
                                                 name="reference"
-                                                value={this.props.itemWithChanges.reference}
+                                                value={this.props.item.reference}
                                                 onChange={(event) => this.props.handleReferenceChange(event)}
                                             />
                                         </div>
@@ -224,14 +224,14 @@ class Question extends React.Component {
                                 <div style={{ display: "table-row" }}>
                                     <div style={{ width: "100%", display: "flex", flexWrap: "wrap", verticalAlign: "center", alignItems: "baseline", columnGap: "10px", padding: "10px 0 0 0" }}>
                                         <div>
-                                            <input type="checkbox" id="questionEnabled" checked={this.props.itemWithChanges.enabled} onChange={this.props.handleEnabledCheckboxChange} />
+                                            <input type="checkbox" id="questionEnabled" checked={this.props.item.enabled} onChange={this.props.handleEnabledCheckboxChange} />
                                             <label for="questionEnabled">Enabled</label>
                                         </div>
                                         <div>
                                             <label for="estimatedTrainingTime">ETT:</label>
-                                            <input type="number" style={{ width: "100px" }} id="estimatedTrainingTime" value={this.props.itemWithChanges.estimatedTrainingTimeSeconds} onChange={this.props.handleEttChange} />
+                                            <input type="number" style={{ width: "100px" }} id="estimatedTrainingTime" value={this.props.item.estimatedTrainingTimeSeconds} onChange={this.props.handleEttChange} />
                                         </div>
-                                        {(this.props.itemWithChanges.myStatus != null) &&
+                                        {(this.props.item.myStatus != null) &&
                                             (
                                                 <div>
                                                     <input type="checkbox" id="questionIsNew" />
@@ -239,7 +239,7 @@ class Question extends React.Component {
                                                 </div>
                                             )
                                         }
-                                        {(this.props.itemWithChanges.myStatus != null) &&
+                                        {(this.props.item.myStatus != null) &&
                                             (
                                                 <div>
                                                     <label for="rating">R:</label>
@@ -247,7 +247,7 @@ class Question extends React.Component {
                                                 </div>
                                             )
                                         }
-                                        {(this.props.itemWithChanges.myStatus != null) &&
+                                        {(this.props.item.myStatus != null) &&
                                             (
                                                 <div>
                                                     <label for="penaltyPoints">PP:</label>
@@ -255,9 +255,9 @@ class Question extends React.Component {
                                                 </div>
                                             )
                                         }
-                                        {(this.props.itemWithChanges.myStatus != null) &&
+                                        {(this.props.item.myStatus != null) &&
                                             (
-                                            <div>ATT: {this.props.itemWithChanges.averageTrainingTimeSeconds ?? "-"}</div>
+                                            <div>ATT: {this.props.item.averageTrainingTimeSeconds ?? "-"}</div>
                                             )
                                         }
                                     </div>
