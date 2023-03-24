@@ -107,6 +107,7 @@ class Question extends React.Component {
                                         name="questionText"
                                         value={this.props.item.text}
                                         onChange={(event) => this.props.handleQuestionTextChange(event)}
+                                        placeholder="Type the question."
                                     />
                                 </div>
                                 <div style={{ display: "flex" }}>
@@ -136,6 +137,7 @@ class Question extends React.Component {
                                                     name="untypedAnswer"
                                                     value={this.props.item.untypedAnswer}
                                                     onChange={(event) => this.props.handleQuestionUntypedAnswerChange(event)}
+                                                    placeholder = "Type the untyped answer."
                                                 />
                                             </div>
                                         </div>
