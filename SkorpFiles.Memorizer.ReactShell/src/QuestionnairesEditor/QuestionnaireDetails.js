@@ -31,7 +31,7 @@ class QuestionnairesDetails extends React.Component {
         this.handleQuestionUntypedAnswerChange = this.handleQuestionUntypedAnswerChange.bind(this);
         this.startEditingQuestion = this.startEditingQuestion.bind(this);
         this.saveEditingQuestion = this.saveEditingQuestion.bind(this);
-
+        this.startAddingQuestion = this.startAddingQuestion.bind(this);
     }
 
     async componentDidMount() {
@@ -54,7 +54,7 @@ class QuestionnairesDetails extends React.Component {
     async refresh() {
         try {
             const response1 =
-                await CallApi("/Repository/Questions?questionnaireId=" + this.props.currentItem.id, "GET", this.props.accessToken);
+                await CallApi("/Repository/Questions?questionnaireId=" + this.props.currentItem.id + "&sortField=addedTime&sortDirection=descending", "GET", this.props.accessToken);
 
             if (response1.ok) {
                 const result = await response1.json();
@@ -95,7 +95,7 @@ class QuestionnairesDetails extends React.Component {
         var questionsField;
         var addQuestion = (
             <div style={{ width: "100%", margin: "10px 0px", padding: "5px 10px", border: "1px solid white", color: "white", display: "flex", flexWrap: "wrap" }}>
-                <div>
+                <div onClick={this.startAddingQuestion}>
                     <a href="#" style={{ color: "white" }}>Add a question</a>
                 </div>
             </div>);
@@ -177,16 +177,27 @@ class QuestionnairesDetails extends React.Component {
                 reference: this.state.questionWithChanges.reference
             };
 
-            var body_editQuestion = {
-                questionnaireId: this.props.currentItem.id,
-                updatedQuestions: [
-                    newItem
-                ]
-            };
+            var body_editQuestion;
 
-            console.log(body_editQuestion);
+            if (this.state.addingQuestionEnabled) {
+                body_editQuestion = {
+                    questionnaireId: this.props.currentItem.id,
+                    createdQuestions: [
+                        newItem
+                    ]
+                }
+            }
+            else {
+                body_editQuestion = {
+                    questionnaireId: this.props.currentItem.id,
+                    updatedQuestions: [
+                        newItem
+                    ]
+                };
+            }
 
-            const response_editQuestion = await CallApi("/Repository/Questions", "POST", this.props.accessToken, JSON.stringify(body_editQuestion));
+                const response_editQuestion = await CallApi("/Repository/Questions", "POST", this.props.accessToken, JSON.stringify(body_editQuestion));
+
 
             if (response_editQuestion.ok) {
                 this.setState({
@@ -316,9 +327,28 @@ class QuestionnairesDetails extends React.Component {
     }
 
     async startAddingQuestion() {
-        this.setState({
-            addingQuestionEnabled: true
-            })
+        var newQuestionDraft = {
+            id: uuidv4(),
+            type: "task",
+            text: null,
+            untypedAnswer: null,
+            typedAnswers: [],
+            estimatedTrainingTimeSeconds: 5,
+            enabled: true,
+            reference: null
+        }
+        this.setState(prevState => ({
+            isInEditorMode: true,
+            addingQuestionEnabled: true,
+            questions: [
+                newQuestionDraft,
+                ...prevState.questions
+            ],
+            questionWithChanges: newQuestionDraft,
+            editingQuestionId: newQuestionDraft.id,
+            editingQuestionError: false,
+            editingQuestionErrorText: ''
+        }))
     }
 }
 
