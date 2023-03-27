@@ -13,7 +13,6 @@ class QuestionnairesDetails extends React.Component {
             questionsIsLoaded: false,
             questionsLoadedError: false,
             questionsLoadingErrorText: '',
-            isInEditorMode: false,
             questionWithChanges: null,
             editingQuestionId: null,
             editingQuestionError: false,
@@ -32,6 +31,7 @@ class QuestionnairesDetails extends React.Component {
         this.startEditingQuestion = this.startEditingQuestion.bind(this);
         this.saveEditingQuestion = this.saveEditingQuestion.bind(this);
         this.startAddingQuestion = this.startAddingQuestion.bind(this);
+        this.deleteQuestion = this.deleteQuestion.bind(this);
     }
 
     async componentDidMount() {
@@ -111,7 +111,7 @@ class QuestionnairesDetails extends React.Component {
                             <div key={item.id}>
                                 <Question
                                     item={this.state.editingQuestionId != item.id ? item : this.state.questionWithChanges}
-                                    controlsBlocked={this.state.isInEditorMode}
+                                    controlsBlocked={this.props.isInEditorMode}
                                     isInEditorMode={this.state.editingQuestionId == item.id}
                                     startEditingQuestion={this.startEditingQuestion}
                                     cancelEdit={this.cancelQuestionToEdit}
@@ -124,6 +124,7 @@ class QuestionnairesDetails extends React.Component {
                                     saveEditingQuestion={this.saveEditingQuestion}
                                     addTypedAnswer={this.addTypedAnswer}
                                     deleteTypedAnswer={this.deleteTypedAnswer}
+                                    deleteQuestion={this.deleteQuestion}
                                 />
                             </div>
                         ))}
@@ -156,11 +157,17 @@ class QuestionnairesDetails extends React.Component {
     }
 
     cancelQuestionToEdit() {
+        if (this.state.addingQuestionEnabled && this.state.questionWithChanges!=null) {
+            this.setState(prevState => ({
+                questions: prevState.questions.filter(question => question.id != this.state.questionWithChanges.id)
+            }));
+        }
+        this.props.setEditorMode(false);
         this.setState({
-            isInEditorMode: false,
             editingQuestionId: null,
             editingQuestionError: false,
-            editingQuestionErrorText: ''
+            editingQuestionErrorText: '',
+            addingQuestionEnabled: false
         });
     }
 
@@ -200,8 +207,8 @@ class QuestionnairesDetails extends React.Component {
 
 
             if (response_editQuestion.ok) {
+                this.props.setEditorMode(false);
                 this.setState({
-                    isInEditorMode: false,
                     editingQuestionId: null,
                     editingQuestionError: false,
                     editingQuestionErrorText: '',
@@ -309,6 +316,7 @@ class QuestionnairesDetails extends React.Component {
     }
 
     startEditingQuestion(item) {
+        this.props.setEditorMode(true);
         this.setState({
             questionWithChanges: {
                 id: item.id,
@@ -320,7 +328,6 @@ class QuestionnairesDetails extends React.Component {
                 enabled: item.enabled,
                 reference: item.reference ?? ''
             },
-            isInEditorMode: true,
             editingQuestionId: item.id,
             editingQuestionError: false,
             editingQuestionErrorText: ''
@@ -328,28 +335,78 @@ class QuestionnairesDetails extends React.Component {
     }
 
     async startAddingQuestion() {
-        var newQuestionDraft = {
-            id: uuidv4(),
-            type: "task",
-            text: '',
-            untypedAnswer: '',
-            typedAnswers: [],
-            estimatedTrainingTimeSeconds: 5,
-            enabled: true,
-            reference: ''
+        if (!this.props.isInEditorMode) {
+            var newQuestionDraft = {
+                id: uuidv4(),
+                type: "task",
+                text: '',
+                untypedAnswer: '',
+                typedAnswers: [],
+                estimatedTrainingTimeSeconds: 5,
+                enabled: true,
+                reference: ''
+            }
+            this.props.setEditorMode(true);
+            this.setState(prevState => ({
+                addingQuestionEnabled: true,
+                questions: [
+                    newQuestionDraft,
+                    ...prevState.questions
+                ],
+                questionWithChanges: newQuestionDraft,
+                editingQuestionId: newQuestionDraft.id,
+                editingQuestionError: false,
+                editingQuestionErrorText: ''
+            }))
         }
-        this.setState(prevState => ({
-            isInEditorMode: true,
-            addingQuestionEnabled: true,
-            questions: [
-                newQuestionDraft,
-                ...prevState.questions
-            ],
-            questionWithChanges: newQuestionDraft,
-            editingQuestionId: newQuestionDraft.id,
-            editingQuestionError: false,
-            editingQuestionErrorText: ''
-        }))
+    }
+
+    async deleteQuestion(id) {
+        if (!this.state.addingQuestionEnabled) {
+            var confirmed = window.confirm("Are you sure?");
+            if (confirmed) {
+                try {
+                    var body = {
+                        questionnaireId: this.props.currentItem.id,
+                        deletedQuestions: [
+                            {
+                                id
+                            }
+                        ]
+                    }
+
+                    const response = await CallApi("/Repository/Questions", "POST", this.props.accessToken, JSON.stringify(body));
+                    if (response.ok) {
+                        this.props.setEditorMode(false);
+                        this.setState({
+                            editingQuestionId: null,
+                            editingQuestionError: false,
+                            editingQuestionErrorText: '',
+                            addingQuestionEnabled: false
+                        });
+                        await this.refresh();
+                    }
+                    else {
+                        const result = await response.json();
+
+                        this.setState({
+                            editingQuestionError: true,
+                            editingQuestionErrorText: `${response.status} ${result.errorText}`
+                        });
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                    this.setState({
+                        editingQuestionError: true,
+                        editingQuestionErrorText: "Error: Unable to save changes."
+                    });
+                }
+            }
+        }
+        else {
+            this.cancelQuestionToEdit();
+        }
     }
 }
 

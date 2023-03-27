@@ -118,7 +118,7 @@ class Question extends React.Component {
                                         <option value="untypedAndTypedAnswers">Untyped and typed answers</option>
                                     </select>
                                     <QuestionButton itemId={this.props.item.id} icon={saveIcon} altText="save" buttonKey="save" doAction={()=>this.props.saveEditingQuestion()} />
-                                    <QuestionButton itemId={this.props.item.id} icon={deleteIcon} altText="delete" buttonKey="delete" />
+                                    <QuestionButton itemId={this.props.item.id} icon={deleteIcon} altText="delete" buttonKey="delete" doAction={() => this.props.deleteQuestion(this.props.item.id)} />
                                     <QuestionButton itemId={this.props.item.id} icon={closeIcon} altText="close" buttonKey="close" doAction={()=>this.props.cancelEdit()} />
                                 </div>
                             </div>

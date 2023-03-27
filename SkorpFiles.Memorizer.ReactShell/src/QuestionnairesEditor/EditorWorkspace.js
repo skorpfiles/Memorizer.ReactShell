@@ -6,28 +6,23 @@ class EditorWorkspace extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: [
-                { id: 1, text: "item1" },
-                { id: 2, text: "item2" }
-            ],
-            currentItem: null
+            currentItem: null,
+            isInEditorMode:false
         };
+        this.setEditorMode = this.setEditorMode.bind(this);
     }
 
     render() {
-        let questionnairesListField;
-        if (this.state.items.length != 0)
-            questionnairesListField = <QuestionnairesList
+        let questionnairesListField = (<QuestionnairesList
                 items={this.state.items}
                 accessToken={this.props.accessToken}
                 switchItem={(newItem) => this.switchItem(newItem)}
-            />;
-        else
-            questionnairesListField = <label style={{ color: "white" }}>No items</label>;
+                isInEditorMode={this.state.isInEditorMode}
+            />);
 
         let workspaceField;
         if (this.state.currentItem != null)
-            workspaceField = (<QuestionnaireDetails currentItem={this.state.currentItem} accessToken={this.props.accessToken} />);
+            workspaceField = (<QuestionnaireDetails currentItem={this.state.currentItem} accessToken={this.props.accessToken} isInEditorMode={this.state.isInEditorMode} setEditorMode={this.setEditorMode} />);
         else
             workspaceField = (<label style={{ color: "white" }}>Nothing is selected</label>);
 
@@ -45,8 +40,16 @@ class EditorWorkspace extends React.Component {
     }
 
     switchItem(newItem) {
+        if (!this.state.isInEditorMode) {
+            this.setState({
+                currentItem: newItem
+            });
+        }
+    }
+
+    setEditorMode(val) {
         this.setState({
-            currentItem: newItem
+            isInEditorMode: val
         });
     }
 }
