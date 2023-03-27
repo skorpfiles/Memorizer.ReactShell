@@ -170,11 +170,11 @@ class QuestionnairesDetails extends React.Component {
                 id: this.state.questionWithChanges.id,
                 type: this.state.questionWithChanges.type,
                 text: this.state.questionWithChanges.text,
-                untypedAnswer: this.state.questionWithChanges.untypedAnswer,
+                untypedAnswer: this.state.questionWithChanges.untypedAnswer != '' ? this.state.questionWithChanges.untypedAnswer : null,
                 typedAnswers: this.state.questionWithChanges.typedAnswers.map(typedAnswer => typedAnswer.text),
                 estimatedTrainingTimeSeconds: this.state.questionWithChanges.estimatedTrainingTimeSeconds,
                 enabled: this.state.questionWithChanges.enabled,
-                reference: this.state.questionWithChanges.reference
+                reference: this.state.questionWithChanges.reference != '' ? this.state.questionWithChanges.reference : null
             };
 
             var body_editQuestion;
@@ -204,7 +204,8 @@ class QuestionnairesDetails extends React.Component {
                     isInEditorMode: false,
                     editingQuestionId: null,
                     editingQuestionError: false,
-                    editingQuestionErrorText: ''
+                    editingQuestionErrorText: '',
+                    addingQuestionEnabled: false
                 });
                 await this.refresh();
             }
@@ -312,12 +313,12 @@ class QuestionnairesDetails extends React.Component {
             questionWithChanges: {
                 id: item.id,
                 type: item.type,
-                text: item.text,
-                untypedAnswer: item.untypedAnswer,
+                text: item.text ?? '',
+                untypedAnswer: item.untypedAnswer ?? '',
                 typedAnswers: item.typedAnswers,
                 estimatedTrainingTimeSeconds: item.estimatedTrainingTimeSeconds,
                 enabled: item.enabled,
-                reference: item.reference
+                reference: item.reference ?? ''
             },
             isInEditorMode: true,
             editingQuestionId: item.id,
@@ -330,12 +331,12 @@ class QuestionnairesDetails extends React.Component {
         var newQuestionDraft = {
             id: uuidv4(),
             type: "task",
-            text: null,
-            untypedAnswer: null,
+            text: '',
+            untypedAnswer: '',
             typedAnswers: [],
             estimatedTrainingTimeSeconds: 5,
             enabled: true,
-            reference: null
+            reference: ''
         }
         this.setState(prevState => ({
             isInEditorMode: true,

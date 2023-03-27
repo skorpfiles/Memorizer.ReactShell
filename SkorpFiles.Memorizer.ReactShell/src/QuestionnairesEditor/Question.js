@@ -210,7 +210,7 @@ class Question extends React.Component {
                                 <div style={{ display: "table-row" }}>
                                     <div style={{ display: "flex", columnGap: "5px", verticalAlign: "center", alignItems:"stretch" }}>
                                         <div>
-                                            <label for="reference">Reference:</label>
+                                            <label>Reference:</label>
                                         </div>
                                         <div style={{ flexBasis: "auto", width: "100%" }}>
                                             <TextareaAutosize
@@ -227,24 +227,24 @@ class Question extends React.Component {
                                     <div style={{ width: "100%", display: "flex", flexWrap: "wrap", verticalAlign: "center", alignItems: "baseline", columnGap: "10px", padding: "10px 0 0 0" }}>
                                         <div>
                                             <input type="checkbox" id="questionEnabled" checked={this.props.item.enabled} onChange={this.props.handleEnabledCheckboxChange} />
-                                            <label for="questionEnabled">Enabled</label>
+                                            <label>Enabled</label>
                                         </div>
                                         <div>
-                                            <label for="estimatedTrainingTime">ETT:</label>
+                                            <label>ETT:</label>
                                             <input type="number" style={{ width: "100px" }} id="estimatedTrainingTime" value={this.props.item.estimatedTrainingTimeSeconds} onChange={this.props.handleEttChange} />
                                         </div>
                                         {(this.props.item.myStatus != null) &&
                                             (
                                                 <div>
                                                     <input type="checkbox" id="questionIsNew" />
-                                                    <label for="questionIsNew">New</label>
+                                                    <label>New</label>
                                                 </div>
                                             )
                                         }
                                         {(this.props.item.myStatus != null) &&
                                             (
                                                 <div>
-                                                    <label for="rating">R:</label>
+                                                    <label>R:</label>
                                                     <input type="number" style={{ width: "50px" }} id="rating" />
                                                 </div>
                                             )
@@ -252,7 +252,7 @@ class Question extends React.Component {
                                         {(this.props.item.myStatus != null) &&
                                             (
                                                 <div>
-                                                    <label for="penaltyPoints">PP:</label>
+                                                    <label>PP:</label>
                                                     <input type="number" style={{ width: "50px" }} id="penaltyPoints" />
                                                 </div>
                                             )
