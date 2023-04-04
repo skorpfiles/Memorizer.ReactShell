@@ -1,7 +1,6 @@
 import React from 'react';
 import { CallApi } from '../GlobalUtilities';
-import Question from './Question.js';
-import EditButton from './QuestionButton.js';
+import Question from './Question/Question.js';
 import { v4 as uuidv4 } from 'uuid';
 
 class QuestionnairesDetails extends React.Component {
