@@ -91,8 +91,8 @@ class QuestionnairesDetails extends React.Component {
     }
 
     render() {
-        var questionsField;
-        var addQuestion = (
+        let questionsField;
+        const addQuestion = (
             <div style={{ width: "100%", margin: "10px 0px", padding: "5px 10px", border: "1px solid white", color: "white", display: "flex", flexWrap: "wrap" }}>
                 <div onClick={this.startAddingQuestion}>
                     <a href="#" style={{ color: "white" }}>Add a question</a>
@@ -172,7 +172,7 @@ class QuestionnairesDetails extends React.Component {
 
     async saveEditingQuestion() {
         try {
-            var newItem = {
+            const newItem = {
                 id: this.state.questionWithChanges.id,
                 type: this.state.questionWithChanges.type,
                 text: this.state.questionWithChanges.text,
@@ -183,7 +183,7 @@ class QuestionnairesDetails extends React.Component {
                 reference: this.state.questionWithChanges.reference != '' ? this.state.questionWithChanges.reference : null
             };
 
-            var body_editQuestion;
+            let body_editQuestion;
 
             if (this.state.addingQuestionEnabled) {
                 body_editQuestion = {
@@ -202,7 +202,7 @@ class QuestionnairesDetails extends React.Component {
                 };
             }
 
-                const response_editQuestion = await CallApi("/Repository/Questions", "POST", this.props.accessToken, JSON.stringify(body_editQuestion));
+            const response_editQuestion = await CallApi("/Repository/Questions", "POST", this.props.accessToken, JSON.stringify(body_editQuestion));
 
 
             if (response_editQuestion.ok) {
@@ -234,7 +234,7 @@ class QuestionnairesDetails extends React.Component {
     }
 
     addTypedAnswer() {
-        let newTypedAnswerText = prompt("Type the answer text", "");
+        const newTypedAnswerText = prompt("Type the answer text", "");
         if (newTypedAnswerText != null && newTypedAnswerText != "") {
             this.setState(prevState => ({
                 questionWithChanges: {
@@ -335,7 +335,7 @@ class QuestionnairesDetails extends React.Component {
 
     async startAddingQuestion() {
         if (!this.props.isInEditorMode) {
-            var newQuestionDraft = {
+            const newQuestionDraft = {
                 id: uuidv4(),
                 type: "task",
                 text: '',
@@ -362,10 +362,10 @@ class QuestionnairesDetails extends React.Component {
 
     async deleteQuestion(id) {
         if (!this.state.addingQuestionEnabled) {
-            var confirmed = window.confirm("Are you sure?");
+            const confirmed = window.confirm("Are you sure?");
             if (confirmed) {
                 try {
-                    var body = {
+                    const body = {
                         questionnaireId: this.props.currentItem.id,
                         deletedQuestions: [
                             {

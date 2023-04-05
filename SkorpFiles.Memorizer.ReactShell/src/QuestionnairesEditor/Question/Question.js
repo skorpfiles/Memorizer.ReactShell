@@ -8,7 +8,7 @@ class Question extends React.Component {
     }
 
     render() {
-        var result;
+        let result;
 
         if (!this.props.isInEditorMode) {
             result = (

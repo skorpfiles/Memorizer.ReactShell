@@ -24,9 +24,9 @@ class MemorizerApp extends React.Component {
 
     async componentDidMount() {
         try {
-            var accessTokenFromCookies = this.getAccessTokenFromCookies();
+            const accessTokenFromCookies = this.getAccessTokenFromCookies();
             if (accessTokenFromCookies != null && accessTokenFromCookies != "") {
-                var userLoginFromCookies = this.getUserLoginFromCookies();
+                const userLoginFromCookies = this.getUserLoginFromCookies();
                 const response =
                     await CallApi("/Account/Check", "GET", accessTokenFromCookies);
 
@@ -108,7 +108,7 @@ class MemorizerApp extends React.Component {
             if (response.ok) {
                 const result = await response.json();
 
-                var expirationDate1 = new Date();
+                let expirationDate1 = new Date();
                 expirationDate1.setDate(expirationDate1.getDate() + CookiesExpireDays);
 
                 document.cookie = "accessToken=" + result.accessToken + "; expires=" + expirationDate1 + "; ";
@@ -186,7 +186,7 @@ class MemorizerApp extends React.Component {
     }
 
     getAccessTokenFromCookies() {
-        var cookieValue = document.cookie
+        const cookieValue = document.cookie
             .split('; ')
             .find(row => row.startsWith('accessToken='))
             .split('=')[1];
@@ -194,7 +194,7 @@ class MemorizerApp extends React.Component {
     }
 
     getUserLoginFromCookies() {
-        var cookieValue = document.cookie
+        const cookieValue = document.cookie
             .split('; ')
             .find(row => row.startsWith('userLogin='))
             .split('=')[1];
