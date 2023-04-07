@@ -2,6 +2,7 @@ import React from 'react';
 import { CallApi } from '../GlobalUtilities';
 import Question from './Question/Question.js';
 import { v4 as uuidv4 } from 'uuid';
+import QuestionnaireToolsPanel from './QuestionnaireToolsPanel';
 
 class QuestionnairesDetails extends React.Component {
     constructor(props) {
@@ -91,13 +92,12 @@ class QuestionnairesDetails extends React.Component {
     }
 
     render() {
-        let questionsField;
         const addQuestion = (
-            <div style={{ width: "100%", margin: "10px 0px", padding: "5px 10px", border: "1px solid white", color: "white", display: "flex", flexWrap: "wrap" }}>
-                <div onClick={this.startAddingQuestion}>
-                    <a href="#" style={{ color: "white" }}>Add a question</a>
-                </div>
-            </div>);
+            <QuestionnaireToolsPanel
+                startAddingQuestion={this.startAddingQuestion}
+            />
+        )
+        let questionsField;
         if (this.state.questionsIsLoading)
             questionsField = (<label style={{ color: "white" }}>Loading...</label>);
         else if (this.state.questionsIsLoaded) {
@@ -107,25 +107,24 @@ class QuestionnairesDetails extends React.Component {
                         {addQuestion}
                         {this.state.questions.map(item =>
                         (
-                            <div key={item.id}>
-                                <Question
-                                    item={this.state.editingQuestionId != item.id ? item : this.state.questionWithChanges}
-                                    controlsBlocked={this.props.isInEditorMode}
-                                    isInEditorMode={this.state.editingQuestionId == item.id}
-                                    startEditingQuestion={this.startEditingQuestion}
-                                    cancelEdit={this.cancelQuestionToEdit}
-                                    handleQuestionTextChange={this.handleQuestionTextChange}
-                                    handleQuestionUntypedAnswerChange={this.handleQuestionUntypedAnswerChange}
-                                    handleQuestionTypeChange={this.handleQuestionTypeChange}
-                                    handleReferenceChange={this.handleReferenceChange}
-                                    handleEnabledCheckboxChange={this.handleEnabledCheckboxChange}
-                                    handleEttChange={this.handleEttChange}
-                                    saveEditingQuestion={this.saveEditingQuestion}
-                                    addTypedAnswer={this.addTypedAnswer}
-                                    deleteTypedAnswer={this.deleteTypedAnswer}
-                                    deleteQuestion={this.deleteQuestion}
-                                />
-                            </div>
+                            <Question
+                                key={item.id}
+                                item={this.state.editingQuestionId != item.id ? item : this.state.questionWithChanges}
+                                controlsBlocked={this.props.isInEditorMode}
+                                isInEditorMode={this.state.editingQuestionId == item.id}
+                                startEditingQuestion={this.startEditingQuestion}
+                                cancelEdit={this.cancelQuestionToEdit}
+                                handleQuestionTextChange={this.handleQuestionTextChange}
+                                handleQuestionUntypedAnswerChange={this.handleQuestionUntypedAnswerChange}
+                                handleQuestionTypeChange={this.handleQuestionTypeChange}
+                                handleReferenceChange={this.handleReferenceChange}
+                                handleEnabledCheckboxChange={this.handleEnabledCheckboxChange}
+                                handleEttChange={this.handleEttChange}
+                                saveEditingQuestion={this.saveEditingQuestion}
+                                addTypedAnswer={this.addTypedAnswer}
+                                deleteTypedAnswer={this.deleteTypedAnswer}
+                                deleteQuestion={this.deleteQuestion}
+                            />
                         ))}
                     </div>
                 )
