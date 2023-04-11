@@ -95,6 +95,7 @@ class QuestionnairesDetails extends React.Component {
         const addQuestion = (
             <QuestionnaireToolsPanel
                 startAddingQuestion={this.startAddingQuestion}
+                deleteQuestionnaire={this.deleteCurrentQuestionnaire}
             />
         )
         let questionsField;
@@ -361,7 +362,7 @@ class QuestionnairesDetails extends React.Component {
 
     async deleteQuestion(id) {
         if (!this.state.addingQuestionEnabled) {
-            const confirmed = window.confirm("Are you sure?");
+            const confirmed = window.confirm("Do you really want to delete the question?");
             if (confirmed) {
                 try {
                     const body = {

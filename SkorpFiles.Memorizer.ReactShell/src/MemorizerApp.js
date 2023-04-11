@@ -3,9 +3,8 @@ import './MemorizerApp.css';
 import UserInfoSection from './UserInfo/UserInfoSection';
 import EditorWorkspace from './QuestionnairesEditor/EditorWorkspace'
 import developerLogo from './skorpFilesLogo.png';
-import { ApiHostUrl, CookiesExpireDays } from './GlobalConstants';
+import { CookiesExpireDays } from './GlobalConstants';
 import { CallApi } from './GlobalUtilities';
-import { useState } from 'react';
 
 class MemorizerApp extends React.Component {
 
