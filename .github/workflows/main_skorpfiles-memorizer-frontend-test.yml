@@ -23,7 +23,7 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          npm install ./SkorpFiles.Memorizer.ReactShell
+          npm install
           npm run build --if-present
           npm run test --if-present
       
@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'skorpfiles-memorizer-frontend-test'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B8EBAA122373477199FB3B5A78FEE3D0 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5D9243189395475CA9D134B7F73A4D11 }}
           package: .
