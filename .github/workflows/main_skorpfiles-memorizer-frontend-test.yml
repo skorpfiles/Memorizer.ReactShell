@@ -34,7 +34,7 @@ jobs:
         with:
           filename: release.zip
           # Base path for archive files
-          path: .
+          path: ./SkorpFiles.Memorizer.ReactShell/build/*
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
