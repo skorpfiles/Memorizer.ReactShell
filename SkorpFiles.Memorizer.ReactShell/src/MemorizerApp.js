@@ -108,7 +108,7 @@ class MemorizerApp extends React.Component {
                 const result = await response.json();
 
                 let expirationDate1 = new Date();
-                expirationDate1.setDate(expirationDate1.getDate() + CookiesExpireDays);
+                expirationDate1.setDate(expirationDate1.getDate() + process.env.REACT_APP_COOKIES_EXPIRE_DAYS);
 
                 document.cookie = "accessToken=" + result.accessToken + "; expires=" + expirationDate1 + "; ";
                 document.cookie = "userLogin=" + result.login + "; expires=" + expirationDate1 + "; ";

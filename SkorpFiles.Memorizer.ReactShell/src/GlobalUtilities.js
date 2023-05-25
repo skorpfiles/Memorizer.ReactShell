@@ -20,5 +20,5 @@ export async function CallApi(relativePath, method, accessToken, body) {
         init['body'] = body;
     }
 
-    return await fetch(ApiHostUrl + relativePath, init);
+    return await fetch(process.env.REACT_APP_API_HOST_URL + relativePath, init);
 }
