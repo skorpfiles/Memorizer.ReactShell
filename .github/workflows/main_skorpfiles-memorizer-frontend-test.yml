@@ -8,6 +8,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+  
+env:
+  REACT_APP_API_HOST_URL: https://skorpfiles-memorizer-api-test.azurewebsites.net
+  REACT_APP_COOKIES_EXPIRE_DAYS: 7
 
 jobs:
   build:
