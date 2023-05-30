@@ -73,7 +73,6 @@ class MemorizerApp extends React.Component {
                         isLoggingError={this.state.isLoggingError}
                         loggingErrorMessage={this.state.loggingErrorMessage}
                     />
-                    {process.env.REACT_APP_API_HOST_URL}
                 </div>
 
                 {body}
