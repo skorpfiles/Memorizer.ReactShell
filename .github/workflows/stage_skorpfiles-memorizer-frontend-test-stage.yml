@@ -9,6 +9,10 @@ on:
       - stage
   workflow_dispatch:
 
+env:
+  REACT_APP_API_HOST_URL: https://skorpfiles-memorizer-api-test-stage.azurewebsites.net
+  REACT_APP_COOKIES_EXPIRE_DAYS: 7
+
 jobs:
   build:
     runs-on: windows-latest
@@ -23,15 +27,24 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          npm install
+          cd ./SkorpFiles.Memorizer.ReactShell && npm install
           npm run build --if-present
           npm run test --if-present
+
+      - name: Zip Release
+        # You may pin to the exact commit or the version.
+        # uses: TheDoctor0/zip-release@a24011d8d445e4da5935a7e73c1f98e22a439464
+        uses: TheDoctor0/zip-release@0.7.1
+        with:
+          filename: release.zip
+          # Base path for archive files
+          path: ./SkorpFiles.Memorizer.ReactShell/build/*
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,4 +66,4 @@ jobs:
           app-name: 'skorpfiles-memorizer-frontend-test-stage'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D1419596A4D24C6FB23DC0DF56861FA4 }}
-          package: .
+          package: release.zip
