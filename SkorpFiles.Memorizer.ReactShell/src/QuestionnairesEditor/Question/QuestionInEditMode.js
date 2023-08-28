@@ -54,7 +54,7 @@ class QuestionInEditMode extends React.Component {
                 {(this.props.item.type != "task") && (
                     <div style={{ display: "table-row" }}>
                         <div style={{ display: "table-cell", padding: "10px 0" }}>
-                            <div style={{ display: "table" }}>
+                            <div style={{ display: "table", width:"100%" }}>
                                 {(this.props.item.type == "untypedAnswer" || this.props.item.type == "untypedAndTypedAnswers") && (
                                     <div style={{ display: "table-row" }}>
                                         <div style={{ display: "table-cell", padding: "0 10px" }} >
