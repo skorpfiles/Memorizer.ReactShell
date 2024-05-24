@@ -2,6 +2,7 @@ import React from 'react'
 import QuestionButton from './QuestionButton.js';
 import TypedAnswer from './TypedAnswer'
 import editIcon from '../Icons/edit.png';
+import MultilineText from '../../MultilineText.jsx';
 
 class QuestionInDisplayMode extends React.Component {
     constructor(props) {
@@ -27,7 +28,7 @@ class QuestionInDisplayMode extends React.Component {
                     <div style={{ display: "table-cell", padding: "10px" }}>
                         <div style={{ width: "100%", display: "flex" }} >
                             <div style={{ flex: "1 0 auto" }} >
-                                <em>{this.props.item.text}</em>
+                                <em><MultilineText text={this.props.item.text} /></em>
                             </div>
                             <div>
                                 {this.state.mouseOnElement && (
@@ -41,23 +42,23 @@ class QuestionInDisplayMode extends React.Component {
                     <div style={{ display: "table-cell", padding: "10px 0" }}>
                         <div style={{ display: "table" }}>
                             <div style={{ display: "table-row" }}>
-                                {(this.props.item.type == "untypedAnswer" || this.props.item.type == "untypedAndTypedAnswers") && (
+                                {(this.props.item.type === "untypedAnswer" || this.props.item.type === "untypedAndTypedAnswers") && (
                                     <div style={{ display: "table-cell", padding: "0 10px" }} >
-                                        <em>{this.props.item.untypedAnswer}</em>
+                                        <em><MultilineText text={this.props.item.untypedAnswer} /></em>
                                     </div>
                                 )}
-                                {this.props.item.type == "task" && (
+                                {this.props.item.type === "task" && (
                                     <div style={{ display: "table-cell", padding: "0 10px" }} >
                                         <em><span style={{ color: "gray" }} >Task</span></em>
                                     </div>
                                 )}
                             </div>
-                            {(this.props.item.type == "untypedAndTypedAnswers") && (
+                            {(this.props.item.type === "untypedAndTypedAnswers") && (
                                 <div style={{ display: "table-row" }}>
                                     <div style={{ display: "table-cell", padding: "5px 0" }}></div>
                                 </div>
                             )}
-                            {((this.props.item.type == "typedAnswers" || this.props.item.type == "untypedAndTypedAnswers") && this.props.item.typedAnswers != null && this.props.item.typedAnswers.length != 0) && (
+                            {((this.props.item.type === "typedAnswers" || this.props.item.type === "untypedAndTypedAnswers") && this.props.item.typedAnswers != null && this.props.item.typedAnswers.length !== 0) && (
                                 <div style={{ display: "table-row" }}>
                                     <div style={{ display: "table-cell", padding: "0 5px" }} >
                                         <div style={{ display: "flex", flexWrap: "wrap", rowGap: "5px" }}>

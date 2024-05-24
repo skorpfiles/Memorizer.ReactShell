@@ -1,4 +1,5 @@
 import React from 'react';
+import TypedAnswerSectionElementCss from './TypedAnswerSectionElement.module.css';
 
 class TypedAnswerSectionElement extends React.Component {
     constructor(props) {
@@ -7,7 +8,7 @@ class TypedAnswerSectionElement extends React.Component {
 
     render() {
         return (
-            <div style={{ margin: "0 5px 0 5px", padding: "2px", border: "1px solid black", borderRadius: "5px", position: "relative" }}>{this.props.children}</div>
+            <div className={TypedAnswerSectionElementCss.TypedAnswerSectionElement}>{this.props.children}</div>
         )
     }
 }
