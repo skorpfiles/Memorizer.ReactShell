@@ -20,7 +20,7 @@ class QuestionInDisplayMode extends React.Component {
 
     render() {
         return (
-            <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#87cefa", fontFamily: "Arial" }}
+            <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "#87cefa", fontFamily: "Open Sans, sans-serif" }}
                 onMouseEnter={() => this.setMouseOnElementFlag(true)}
                 onMouseLeave={() => this.setMouseOnElementFlag(false)}
             >
@@ -28,7 +28,7 @@ class QuestionInDisplayMode extends React.Component {
                     <div style={{ display: "table-cell", padding: "10px" }}>
                         <div style={{ width: "100%", display: "flex" }} >
                             <div style={{ flex: "1 0 auto" }} >
-                                <em><MultilineText text={this.props.item.text} /></em>
+                                <MultilineText text={this.props.item.text} />
                             </div>
                             <div>
                                 {this.state.mouseOnElement && (
@@ -44,12 +44,12 @@ class QuestionInDisplayMode extends React.Component {
                             <div style={{ display: "table-row" }}>
                                 {(this.props.item.type === "untypedAnswer" || this.props.item.type === "untypedAndTypedAnswers") && (
                                     <div style={{ display: "table-cell", padding: "0 10px" }} >
-                                        <em><MultilineText text={this.props.item.untypedAnswer} /></em>
+                                        <MultilineText text={this.props.item.untypedAnswer} />
                                     </div>
                                 )}
                                 {this.props.item.type === "task" && (
                                     <div style={{ display: "table-cell", padding: "0 10px" }} >
-                                        <em><span style={{ color: "gray" }} >Task</span></em>
+                                        <span style={{ color: "gray" }} >Task</span>
                                     </div>
                                 )}
                             </div>

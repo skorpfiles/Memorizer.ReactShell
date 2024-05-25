@@ -23,13 +23,13 @@ class QuestionInEditMode extends React.Component {
 
     render() {
         return (
-            <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "white", fontFamily: "Arial" }}>
+            <div style={{ display: "table", width: "100%", margin: "10px 0px", backgroundColor: "white", fontFamily: "Open Sans, sans-serif" }}>
                 <div style={{ display: "table-row", fontSize: "1.5em", backgroundColor: "#E6E6FA" }}>
                     <div style={{ display: "table-cell", padding: "10px" }}>
                         <div style={{ width: "100%", display: "flex" }} >
                             <div style={{ flex: "1 0 auto" }} >
                                 <TextareaAutosize
-                                    style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }}
+                                    style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontSize: "1em", fontFamily: "Open Sans, sans-serif" }}
                                     id="questionText"
                                     name="questionText"
                                     value={this.props.item.text}
@@ -59,7 +59,7 @@ class QuestionInEditMode extends React.Component {
                                     <div style={{ display: "table-row" }}>
                                         <div style={{ display: "table-cell", padding: "0 10px" }} >
                                             <TextareaAutosize
-                                                style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontStyle: "italic", fontSize: "1em", fontFamily: "Arial" }}
+                                                style={{ width: "100%", border: "none", outline: "none", resize: "none", backgroundColor: "transparent", overflow: "hidden", fontSize: "1em", fontFamily: "Open Sans, sans-serif" }}
                                                 id="untypedAnswer"
                                                 name="untypedAnswer"
                                                 value={this.props.item.untypedAnswer}

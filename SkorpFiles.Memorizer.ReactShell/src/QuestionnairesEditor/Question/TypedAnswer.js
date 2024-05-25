@@ -32,7 +32,7 @@ class TypedAnswer extends React.Component {
                     onMouseEnter={this.handleOnMouseEnter}
                     onMouseLeave={this.handleOnMouseLeave}
                 >
-                    <em>{this.props.text}</em>
+                    {this.props.text}
                     {(this.props.isInEditorMode && this.state.mouseOnComponent) && (
                         <div style={{
                             position: "absolute",
