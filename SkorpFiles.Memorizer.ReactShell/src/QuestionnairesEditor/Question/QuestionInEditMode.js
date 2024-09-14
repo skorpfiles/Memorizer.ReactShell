@@ -17,6 +17,10 @@ class QuestionInEditMode extends React.Component {
         }
     }
 
+    async componentDidMount() {
+        this.props.restoreScrollPosition();
+    }
+
     setMouseOnTypedAnswerFlag(typedAnswerId) {
         this.setState({ selectedTypedAnswerId: typedAnswerId });
     }

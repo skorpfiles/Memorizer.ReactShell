@@ -6,6 +6,7 @@ import developerLogo from './skorpFilesLogo.png';
 import { CookiesExpireDays } from './GlobalConstants';
 import { CallApi } from './GlobalUtilities';
 
+const currentCookiesVersion = '2';
 class MemorizerApp extends React.Component {
 
     constructor(props) {
@@ -17,27 +18,33 @@ class MemorizerApp extends React.Component {
             userLogin: null,
             accessToken: null,
             isLoggingError: false,
-            loggingErrorMessage: null
+            loggingErrorMessage: null,
+            userId: null
         };
     }
 
     async componentDidMount() {
         try {
-            const accessTokenFromCookies = this.getAccessTokenFromCookies();
-            if (accessTokenFromCookies != null && accessTokenFromCookies != "") {
-                const userLoginFromCookies = this.getUserLoginFromCookies();
-                const response =
-                    await CallApi("/Account/Check", "GET", accessTokenFromCookies);
+            const cookiesVersion = this.getCookiesVersionFromCookies();
+            if (cookiesVersion === currentCookiesVersion) {
+                const accessTokenFromCookies = this.getAccessTokenFromCookies();
+                if (accessTokenFromCookies != null && accessTokenFromCookies !== "") {
+                    const userLoginFromCookies = this.getUserLoginFromCookies();
+                    const userIdFromCookies = this.getUserIdFromCookies();
+                    const response =
+                        await CallApi("/Account/Check", "GET", accessTokenFromCookies);
 
-                if (response.ok) {
-                    this.setState({
-                        isUserLogged: true,
-                        isUserLogging: false,
-                        userLogin: userLoginFromCookies,
-                        accessToken: accessTokenFromCookies,
-                        isLoggingError: false,
-                        loggingErrorMessage: null
-                    });
+                    if (response.ok) {
+                        this.setState({
+                            isUserLogged: true,
+                            isUserLogging: false,
+                            userLogin: userLoginFromCookies,
+                            accessToken: accessTokenFromCookies,
+                            userId: userIdFromCookies,
+                            isLoggingError: false,
+                            loggingErrorMessage: null
+                        });
+                    }
                 }
             }
         }
@@ -52,7 +59,7 @@ class MemorizerApp extends React.Component {
         if (this.state.isUserLogged)
             body = (
                 <div className="workarea">
-                    <EditorWorkspace isUserLogged={this.state.isUserLogged} accessToken={this.state.accessToken} />
+                    <EditorWorkspace isUserLogged={this.state.isUserLogged} accessToken={this.state.accessToken} userId={this.state.userId} />
                 </div>
             );
         else
@@ -112,6 +119,8 @@ class MemorizerApp extends React.Component {
 
                 document.cookie = "accessToken=" + result.accessToken + "; expires=" + expirationDate1 + "; ";
                 document.cookie = "userLogin=" + result.login + "; expires=" + expirationDate1 + "; ";
+                document.cookie = "userId=" + result.userId + "; expires=" + expirationDate1 + "; ";
+                document.cookie = "cookiesVersion=" + currentCookiesVersion + "; expires=" + expirationDate1 + "; ";
 
                 this.setState({
                     isUserLogged: true,
@@ -163,6 +172,8 @@ class MemorizerApp extends React.Component {
 
                 document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                 document.cookie = "userLogin=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                document.cookie = "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                document.cookie = "cookiesVersion=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
             }
             else {
                 const result = await response.json();
@@ -196,6 +207,22 @@ class MemorizerApp extends React.Component {
         const cookieValue = document.cookie
             .split('; ')
             .find(row => row.startsWith('userLogin='))
+            .split('=')[1];
+        return cookieValue;
+    }
+
+    getUserIdFromCookies() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('userId='))
+            .split('=')[1];
+        return cookieValue;
+    }
+
+    getCookiesVersionFromCookies() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('cookiesVersion='))
             .split('=')[1];
         return cookieValue;
     }

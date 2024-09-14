@@ -14,20 +14,45 @@ class EditorWorkspace extends React.Component {
             listIsLoaded: false,
             listIsLoadedError: false,
             listLoadedErrorText: '',
+            scrollPositionIsOnKeeping: false,
         };
         this.setEditorMode = this.setEditorMode.bind(this);
         this.addQuestionnaire = this.addQuestionnaire.bind(this);
         this.deleteCurrentQuestionnaire = this.deleteCurrentQuestionnaire.bind(this);
         this.refresh = this.refresh.bind(this);
         this.switchQuestionnaire = this.switchQuestionnaire.bind(this);
+
+        this.listRef = React.createRef();
+        this.scrollPosition = 0;
+        this.restoreScrollPosition = this.restoreScrollPosition.bind(this);
+        this.saveScrollPosition = this.saveScrollPosition.bind(this);
     }
 
     async componentDidMount() {
         await this.refresh();
     }
 
+    restoreScrollPosition() {
+        if (this.state.scrollPositionIsOnKeeping) {
+            this.setState({
+                scrollPositionIsOnKeeping: false
+            });
+            setTimeout(() => {
+                window.scrollTo(0, this.scrollPosition);
+            }, 0);
+        }
+    }
+
+    saveScrollPosition() {
+        this.setState({
+            scrollPositionIsOnKeeping: true
+        });
+        this.scrollPosition = window.scrollY;
+    }
+
     render() {
         let questionnairesListField = (<QuestionnairesList
+            ref={this.listRef}
             items={this.state.items}
             accessToken={this.props.accessToken}
             switchItem={(newItem) => this.switchQuestionnaire(newItem)}
@@ -43,7 +68,15 @@ class EditorWorkspace extends React.Component {
 
         let workspaceField;
         if (this.state.currentQuestionnaire != null)
-            workspaceField = (<QuestionnaireDetails currentItem={this.state.currentQuestionnaire} accessToken={this.props.accessToken} isInEditorMode={this.state.isInEditorMode} setEditorMode={this.setEditorMode} />);
+            workspaceField = (<QuestionnaireDetails
+                currentItem={this.state.currentQuestionnaire}
+                accessToken={this.props.accessToken}
+                isInEditorMode={this.state.isInEditorMode}
+                setEditorMode={this.setEditorMode}
+                saveScrollPosition={this.saveScrollPosition}
+                restoreScrollPosition={this.restoreScrollPosition}
+                userId={this.props.userId}
+            />);
         else
             workspaceField = (<label style={{ color: "white" }}>Nothing is selected</label>);
 

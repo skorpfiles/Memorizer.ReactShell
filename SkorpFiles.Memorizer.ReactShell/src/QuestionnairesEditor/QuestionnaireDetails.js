@@ -34,10 +34,6 @@ class QuestionnairesDetails extends React.Component {
         this.deleteQuestion = this.deleteQuestion.bind(this);
     }
 
-    async componentDidMount() {
-        await this.refresh();
-    }
-
     async componentDidUpdate(prevProps) {
         if (this.props.currentItem.id !== prevProps.currentItem.id) {
             this.setState({
@@ -48,13 +44,14 @@ class QuestionnairesDetails extends React.Component {
                     questionsLoadingErrorText: ''
                 })
             await this.refresh();
+            this.props.restoreScrollPosition();
         }            
-    } 
+    }
 
     async refresh() {
         try {
             const response1 =
-                await CallApi("/Repository/Questions?questionnaireId=" + this.props.currentItem.id + "&sortField=addedTime&sortDirection=descending", "GET", this.props.accessToken);
+                await CallApi("/Repository/Questions?questionnaireId=" + this.props.currentItem.id + "&sortField=addedTime&sortDirection=descending&pageNumber=1&pageSize=1000", "GET", this.props.accessToken);
 
             if (response1.ok) {
                 const result = await response1.json();
@@ -96,6 +93,7 @@ class QuestionnairesDetails extends React.Component {
             <QuestionnaireToolsPanel
                 startAddingQuestion={this.startAddingQuestion}
                 deleteQuestionnaire={this.deleteCurrentQuestionnaire}
+                canBeEdited={this.props.currentItem.ownerId === this.props.userId }
             />
         )
         let questionsField;
@@ -125,6 +123,8 @@ class QuestionnairesDetails extends React.Component {
                                 addTypedAnswer={this.addTypedAnswer}
                                 deleteTypedAnswer={this.deleteTypedAnswer}
                                 deleteQuestion={this.deleteQuestion}
+                                saveScrollPosition={this.props.saveScrollPosition}
+                                restoreScrollPosition={this.props.restoreScrollPosition}
                             />
                         ))}
                     </div>
@@ -156,6 +156,7 @@ class QuestionnairesDetails extends React.Component {
     }
 
     cancelQuestionToEdit() {
+        this.props.saveScrollPosition();
         if (this.state.addingQuestionEnabled && this.state.questionWithChanges!=null) {
             this.setState(prevState => ({
                 questions: prevState.questions.filter(question => question.id != this.state.questionWithChanges.id)
@@ -172,6 +173,7 @@ class QuestionnairesDetails extends React.Component {
 
     async saveEditingQuestion() {
         try {
+            this.props.saveScrollPosition();
             const newItem = {
                 id: this.state.questionWithChanges.id,
                 type: this.state.questionWithChanges.type,
@@ -216,6 +218,7 @@ class QuestionnairesDetails extends React.Component {
                 await this.refresh();
             }
             else {
+                this.props.restoreScrollPosition();
                 const result_editQuestion = await response_editQuestion.json();
 
                 this.setState({
@@ -315,6 +318,7 @@ class QuestionnairesDetails extends React.Component {
     }
 
     startEditingQuestion(item) {
+        this.props.saveScrollPosition();
         this.props.setEditorMode(true);
         this.setState({
             questionWithChanges: {
@@ -365,6 +369,7 @@ class QuestionnairesDetails extends React.Component {
             const confirmed = window.confirm("Do you really want to delete the question?");
             if (confirmed) {
                 try {
+                    this.props.saveScrollPosition();
                     const body = {
                         questionnaireId: this.props.currentItem.id,
                         deletedQuestions: [

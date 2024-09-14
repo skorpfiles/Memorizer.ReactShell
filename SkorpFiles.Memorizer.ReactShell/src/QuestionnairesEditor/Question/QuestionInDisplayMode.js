@@ -13,6 +13,10 @@ class QuestionInDisplayMode extends React.Component {
         }
     }
 
+    async componentDidMount() {
+        this.props.restoreScrollPosition();
+    }
+
     setMouseOnElementFlag(param) {
         if ((param == true && !this.props.controlsBlocked) || param == false)
             this.setState({ mouseOnElement: param });

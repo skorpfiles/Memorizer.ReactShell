@@ -16,6 +16,8 @@ class Question extends React.Component {
                     item={this.props.item}
                     controlsBlocked={this.props.controlsBlocked}
                     startEditingQuestion={this.props.startEditingQuestion}
+                    saveScrollPosition={this.props.saveScrollPosition}
+                    restoreScrollPosition={this.props.restoreScrollPosition}
                 />
             );
         }
@@ -34,6 +36,8 @@ class Question extends React.Component {
                     addTypedAnswer={this.props.addTypedAnswer}
                     deleteTypedAnswer={this.props.deleteTypedAnswer}
                     deleteQuestion={this.props.deleteQuestion}
+                    saveScrollPosition={this.props.saveScrollPosition}
+                    restoreScrollPosition={this.props.restoreScrollPosition}
                 />
             );
         }
