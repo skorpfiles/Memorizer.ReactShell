@@ -79,6 +79,9 @@ class QuestionnairesDetails extends React.Component {
                     questionsLoadingErrorText: `${response1.status} ${result.errorText}`
                 });
             }
+            console.log("this.props.currentItem.ownerId: " + this.props.currentItem.ownerId);
+            console.log("this.props.userId: " + this.props.userId);
+            console.log("canBeEdited: " + this.props.currentItem.ownerId === this.props.userId);
         }
         catch (error) {
             console.log(error);
