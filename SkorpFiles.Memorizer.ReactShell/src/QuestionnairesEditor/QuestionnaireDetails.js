@@ -34,6 +34,10 @@ class QuestionnairesDetails extends React.Component {
         this.deleteQuestion = this.deleteQuestion.bind(this);
     }
 
+    async componentDidMount() {
+        await this.refresh();
+    }
+
     async componentDidUpdate(prevProps) {
         if (this.props.currentItem.id !== prevProps.currentItem.id) {
             this.setState({
