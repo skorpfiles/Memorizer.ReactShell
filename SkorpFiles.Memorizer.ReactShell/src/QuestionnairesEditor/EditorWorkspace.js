@@ -18,6 +18,7 @@ class EditorWorkspace extends React.Component {
         };
         this.setEditorMode = this.setEditorMode.bind(this);
         this.addQuestionnaire = this.addQuestionnaire.bind(this);
+        this.renameCurrentQuestionnaire = this.renameCurrentQuestionnaire.bind(this);
         this.deleteCurrentQuestionnaire = this.deleteCurrentQuestionnaire.bind(this);
         this.refresh = this.refresh.bind(this);
         this.switchQuestionnaire = this.switchQuestionnaire.bind(this);
@@ -63,6 +64,7 @@ class EditorWorkspace extends React.Component {
             isLoadedError={this.state.listIsLoadedError}
             loadedErrorText={this.state.listLoadedErrorText}
             addQuestionnaire={this.addQuestionnaire}
+            renameCurrentQuestionnaire={this.renameCurrentQuestionnaire}
             deleteCurrentQuestionnaire={this.deleteCurrentQuestionnaire}
         />);
 
@@ -169,6 +171,48 @@ class EditorWorkspace extends React.Component {
             catch (error) {
                 console.log(error);
                 alert("Error: Unable to save changes.");
+            }
+        }
+    }
+
+    async renameCurrentQuestionnaire() {
+        const currentQuestionnaireId = this.state.currentQuestionnaire?.id;
+        if (currentQuestionnaireId != null) {
+            const newQuestionnaireName = prompt("Type the new questionnaire name", this.state.currentQuestionnaire.name);
+
+            const updatedItem = {
+                id: this.state.currentQuestionnaire.id,
+                name: newQuestionnaireName
+            };
+
+            try {
+                const response = await CallApi("/Repository/Questionnaire", "POST", this.props.accessToken, JSON.stringify(updatedItem));
+                if (response.ok) {
+
+                    this.setState(prevState => ({
+                        currentQuestionnaire: {
+                            ...prevState.currentQuestionnaire,
+                            name: updatedItem.name
+                        }
+                    }))
+
+                    await this.refresh();
+                }
+                else {
+                    const result = await response.json();
+
+                    this.setState({
+                        editingQuestionError: true,
+                        editingQuestionErrorText: `${response.status} ${result.errorText}`
+                    });
+                }
+            }
+            catch (error) {
+                console.log(error);
+                this.setState({
+                    editingQuestionError: true,
+                    editingQuestionErrorText: "Error: Unable to save changes."
+                });
             }
         }
     }

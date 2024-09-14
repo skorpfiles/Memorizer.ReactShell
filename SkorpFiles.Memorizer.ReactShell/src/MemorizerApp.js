@@ -103,6 +103,7 @@ class MemorizerApp extends React.Component {
                 isUserLogged: false,
                 isUserLogging: true,
                 userLogin: null,
+                userId: null,
                 accessToken: null,
                 isLoggingError: false,
                 loggingErrorMessage: null
@@ -126,6 +127,7 @@ class MemorizerApp extends React.Component {
                     isUserLogged: true,
                     isUserLogging: false,
                     userLogin: result.login,
+                    userId: result.userId,
                     accessToken: result.accessToken,
                     isLoggingError: false,
                     loggingErrorMessage: null
@@ -138,6 +140,7 @@ class MemorizerApp extends React.Component {
                     isUserLogged: false,
                     isUserLogging: false,
                     userLogin: null,
+                    userId: null,
                     accessToken: null,
                     isLoggingError: true,
                     loggingErrorMessage: `${response.status} ${result.errorText}`
@@ -150,6 +153,7 @@ class MemorizerApp extends React.Component {
                 isUserLogged: false,
                 isUserLogging: false,
                 userLogin: null,
+                userId: null,
                 accessToken: null,
                 isLoggingError: true,
                 loggingErrorMessage: "Error: Unable to connect to the API"
@@ -165,6 +169,7 @@ class MemorizerApp extends React.Component {
                     isUserLogged: false,
                     isUserLogging: false,
                     userLogin: null,
+                    userId: null,
                     accessToken: null,
                     isLoggingError: false,
                     loggingErrorMessage: null

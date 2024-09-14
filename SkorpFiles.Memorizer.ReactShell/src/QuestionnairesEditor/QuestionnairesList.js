@@ -28,6 +28,11 @@ class QuestionnairesList extends React.Component {
                             </div>
                         )}
                         {this.props.currentQuestionnaire && !this.props.isInEditorMode && (
+                            <div style={{ width: "100%", color: "white", padding: "0 0 0 25px" }} onClick={this.props.renameCurrentQuestionnaire}>
+                                <a href="#" style={{ color: "white" }}>Rename the current questionnaire</a>
+                            </div>
+                        )}
+                        {this.props.currentQuestionnaire && !this.props.isInEditorMode && (
                             <div style={{ width: "100%", color: "white", padding: "0 0 0 25px" }} onClick={this.props.deleteCurrentQuestionnaire}>
                                 <a href="#" style={{ color: "white" }}>Delete the current questionnaire</a>
                             </div>
