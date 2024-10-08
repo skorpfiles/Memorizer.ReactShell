@@ -31,7 +31,7 @@ class QuestionInDisplayMode extends React.Component {
                 <div style={{ display: "table-row", fontSize: "1.5em", backgroundColor: "#6495ed" }}>
                     <div style={{ display: "table-cell", padding: "10px" }}>
                         <div style={{ width: "100%", display: "flex" }} >
-                            <div style={{ flex: "1 0 auto" }} >
+                            <div style={{ flex: "1 0 0" }} >
                                 <MultilineText text={this.props.item.text} />
                             </div>
                             <div>
