@@ -18,6 +18,8 @@ class QuestionnairesDetails extends React.Component {
             editingQuestionError: false,
             editingQuestionErrorText: '',
             addingQuestionEnabled: false,
+            addingQuestionLastType: "task",
+            addingQuestionLastEstimatedTrainingTimeSeconds: 5
         };
         this.cancelQuestionToEdit = this.cancelQuestionToEdit.bind(this);
         this.addTypedAnswer = this.addTypedAnswer.bind(this);
@@ -213,12 +215,14 @@ class QuestionnairesDetails extends React.Component {
 
             if (response_editQuestion.ok) {
                 this.props.setEditorMode(false);
-                this.setState({
+                this.setState(prevState => ({
                     editingQuestionId: null,
                     editingQuestionError: false,
                     editingQuestionErrorText: '',
-                    addingQuestionEnabled: false
-                });
+                    addingQuestionEnabled: false,
+                    addingQuestionLastType: prevState.questionWithChanges.type,
+                    addingQuestionLastEstimatedTrainingTimeSeconds: prevState.questionWithChanges.estimatedTrainingTimeSeconds
+                }));
                 await this.refresh();
             }
             else {
@@ -345,11 +349,11 @@ class QuestionnairesDetails extends React.Component {
         if (!this.props.isInEditorMode) {
             const newQuestionDraft = {
                 id: uuidv4(),
-                type: "task",
+                type: this.state.addingQuestionLastType,
                 text: '',
                 untypedAnswer: '',
                 typedAnswers: [],
-                estimatedTrainingTimeSeconds: 5,
+                estimatedTrainingTimeSeconds: this.state.addingQuestionLastEstimatedTrainingTimeSeconds,
                 enabled: true,
                 reference: ''
             }
