@@ -112,7 +112,7 @@ class EditorWorkspace extends React.Component {
     async refresh() {
         try {
             const response =
-                await CallApi("/Repository/Questionnaires", "GET", this.props.accessToken);
+                await CallApi("/Repository/Questionnaires?SortField=EditingTime&SortDirection=Descending", "GET", this.props.accessToken);
 
             if (response.ok) {
                 const result = await response.json();
