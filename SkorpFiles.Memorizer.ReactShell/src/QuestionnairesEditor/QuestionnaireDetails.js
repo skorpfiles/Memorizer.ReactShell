@@ -9,10 +9,13 @@ class QuestionnairesDetails extends React.Component {
         super(props);
         this.state = {
             questions: null,
+            questionsBeforeFiltering: null,
             questionsIsLoading: true,
             questionsIsLoaded: false,
             questionsLoadedError: false,
             questionsLoadingErrorText: '',
+            labelsForQuestionnaire: [],
+            selectedLabelsForQuestionnaire: [],
             questionWithChanges: null,
             editingQuestionId: null,
             editingQuestionError: false,
@@ -30,6 +33,7 @@ class QuestionnairesDetails extends React.Component {
         this.handleQuestionTypeChange = this.handleQuestionTypeChange.bind(this);
         this.handleQuestionTextChange = this.handleQuestionTextChange.bind(this);
         this.handleQuestionUntypedAnswerChange = this.handleQuestionUntypedAnswerChange.bind(this);
+        this.handleLabelChoosing = this.handleLabelChoosing.bind(this);
         this.startEditingQuestion = this.startEditingQuestion.bind(this);
         this.saveEditingQuestion = this.saveEditingQuestion.bind(this);
         this.startAddingQuestion = this.startAddingQuestion.bind(this);
@@ -43,12 +47,13 @@ class QuestionnairesDetails extends React.Component {
     async componentDidUpdate(prevProps) {
         if (this.props.currentItem.id !== prevProps.currentItem.id) {
             this.setState({
-                    questions: null,
-                    questionsIsLoading: true,
-                    questionsIsLoaded: false,
-                    questionsLoadedError: false,
-                    questionsLoadingErrorText: ''
-                })
+                questions: null,
+                questionsBeforeFiltering: null,
+                questionsIsLoading: true,
+                questionsIsLoaded: false,
+                questionsLoadedError: false,
+                questionsLoadingErrorText: ''
+            });
             await this.refresh();
             this.props.restoreScrollPosition();
         }            
@@ -56,29 +61,37 @@ class QuestionnairesDetails extends React.Component {
 
     async refresh() {
         try {
-            const response1 =
-                await CallApi("/Repository/Questions?questionnaireId=" + this.props.currentItem.id + "&sortField=addedTime&sortDirection=descending&pageNumber=1&pageSize=1000", "GET", this.props.accessToken);
+            const responses = await Promise.allSettled([
+                CallApi("/Repository/Questions?questionnaireId=" + this.props.currentItem.id + "&sortField=addedTime&sortDirection=descending&pageNumber=1&pageSize=1000", "GET", this.props.accessToken),
+                CallApi("/Repository/Questionnaire/" + this.props.currentItem.id + "?includeLabelsList=true", "GET", this.props.accessToken)
+            ]);
 
-            if (response1.ok) {
-                const result = await response1.json();
+            if (responses.every(resp => resp.value.ok)) {
+                const questionsResult = await responses[0].value.json();
+                const questionnaireResult = await responses[1].value.json();
 
                 this.setState({
-                    questions: result.questions,
+                    questions: questionsResult.questions,
+                    questionsBeforeFiltering: questionsResult.questions,
                     questionsIsLoading: false,
                     questionsIsLoaded: true,
                     questionsLoadedError: false,
-                    questionsLoadingErrorText: ''
+                    questionsLoadingErrorText: '',
+                    labelsForQuestionnaire: questionnaireResult.labelsForQuestionnaire,
+                    selectedLabelsForQuestionnaire: []
                 });
             }
             else {
-                const result = await response1.json();
+                const resp = await responses.filter(resp => resp.status === "rejected")[0];
+                const result = resp.value.json();
 
                 this.setState({
                     questions: null,
+                    questionsBeforeFiltering: null,
                     questionsIsLoading: false,
                     questionsIsLoaded: false,
                     questionsLoadedError: true,
-                    questionsLoadingErrorText: `${response1.status} ${result.errorText}`
+                    questionsLoadingErrorText: `${resp.value.status} ${result.errorText}`
                 });
             }
         }
@@ -86,6 +99,7 @@ class QuestionnairesDetails extends React.Component {
             console.log(error);
             this.setState({
                 questions: null,
+                questionsBeforeFiltering: null,
                 questionsIsLoading: false,
                 questionsIsLoaded: false,
                 questionsLoadedError: true,
@@ -99,14 +113,17 @@ class QuestionnairesDetails extends React.Component {
             <QuestionnaireToolsPanel
                 startAddingQuestion={this.startAddingQuestion}
                 deleteQuestionnaire={this.deleteCurrentQuestionnaire}
-                canBeEdited={this.props.currentItem.ownerId === this.props.userId }
+                canBeEdited={this.props.currentItem.ownerId === this.props.userId}
+                labelsForQuestionnaire={this.state.labelsForQuestionnaire}
+                selectedLabels={this.state.selectedLabelsForQuestionnaire}
+                handleLabelChoosing={this.handleLabelChoosing}
             />
         )
         let questionsField;
         if (this.state.questionsIsLoading)
             questionsField = (<label style={{ color: "white" }}>Loading...</label>);
         else if (this.state.questionsIsLoaded) {
-            if (this.state.questions.length != 0) {
+            if (this.state.questions.length !== 0) {
                 questionsField = (
                     <div>
                         {addQuestion}
@@ -114,9 +131,9 @@ class QuestionnairesDetails extends React.Component {
                         (
                             <Question
                                 key={item.id}
-                                item={this.state.editingQuestionId != item.id ? item : this.state.questionWithChanges}
+                                item={this.state.editingQuestionId !== item.id ? item : this.state.questionWithChanges}
                                 controlsBlocked={this.props.isInEditorMode}
-                                isInEditorMode={this.state.editingQuestionId == item.id}
+                                isInEditorMode={this.state.editingQuestionId === item.id}
                                 startEditingQuestion={this.startEditingQuestion}
                                 cancelEdit={this.cancelQuestionToEdit}
                                 handleQuestionTextChange={this.handleQuestionTextChange}
@@ -324,6 +341,41 @@ class QuestionnairesDetails extends React.Component {
             }
         }))
     }
+
+    handleLabelChoosing(labelName) {
+        if (!this.state.selectedLabelsForQuestionnaire.includes(labelName)) {
+            this.setState(prevState => ({
+                selectedLabelsForQuestionnaire: [...prevState.selectedLabelsForQuestionnaire, labelName],
+                questions: this.getFilteredQuestionsWithAddingLabel(prevState, labelName)
+            }))
+        } else {
+            this.setState(prevState => ({
+                selectedLabelsForQuestionnaire: prevState.selectedLabelsForQuestionnaire.filter(v => v !== labelName),
+                questions: this.getFilteredQuestionsWithRemovingLabel(prevState, labelName)
+            }))
+        }
+    }
+
+    getFilteredQuestionsWithAddingLabel(prevState, newLabelName) {
+        let result;
+        if (prevState.selectedLabelsForQuestionnaire.length === 0) {
+            result = prevState.questionsBeforeFiltering.filter(qbf => qbf.labels.includes(newLabelName));
+        } else {
+            result = prevState.questionsBeforeFiltering.filter(qbf => prevState.selectedLabelsForQuestionnaire.every(lbl => qbf.labels.includes(lbl)) && qbf.labels.includes(newLabelName));
+        }
+        return result;
+    }
+
+    getFilteredQuestionsWithRemovingLabel(prevState, removingLabelName) {
+        let result;
+        if (prevState.selectedLabelsForQuestionnaire.length === 1) {
+            result = prevState.questionsBeforeFiltering;
+        } else {
+            result = prevState.questionsBeforeFiltering.filter(qbf => prevState.selectedLabelsForQuestionnaire.filter(flbl => flbl !== removingLabelName).every(lbl => qbf.labels.includes(lbl)));
+        }
+        return result;
+    }
+
 
     startEditingQuestion(item) {
         this.props.saveScrollPosition();
