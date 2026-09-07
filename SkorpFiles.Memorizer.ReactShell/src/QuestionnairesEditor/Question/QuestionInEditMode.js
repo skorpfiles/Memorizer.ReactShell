@@ -7,6 +7,8 @@ import addIcon from '../Icons/add.png';
 import TextareaAutosize from 'react-textarea-autosize';
 import TypedAnswer from './TypedAnswer.js';
 import AddTypedAnswerButton from './AddTypedAnswerButton'
+import Label from './Label.js';
+import AddLabelControl from './AddLabelControl.js';
 
 class QuestionInEditMode extends React.Component {
     constructor(props) {
@@ -124,7 +126,7 @@ class QuestionInEditMode extends React.Component {
                                 </div>
                             </div>
                             <div style={{ display: "table-row" }}>
-                                <div style={{ width: "100%", display: "flex", flexWrap: "wrap", verticalAlign: "center", alignItems: "baseline", columnGap: "10px", padding: "10px 0 0 0" }}>
+                                <div style={{ width: "100%", display: "flex", flexWrap: "wrap", verticalAlign: "center", alignItems: "baseline", columnGap: "10px", padding: "10px 0 10px 0" }}>
                                     <div>
                                         <input type="checkbox" id="questionEnabled" checked={this.props.item.enabled} onChange={this.props.handleEnabledCheckboxChange} />
                                         <label>Enabled</label>
@@ -133,35 +135,25 @@ class QuestionInEditMode extends React.Component {
                                         <label>ETT:</label>
                                         <input type="number" style={{ width: "100px" }} id="estimatedTrainingTime" value={this.props.item.estimatedTrainingTimeSeconds} onChange={this.props.handleEttChange} />
                                     </div>
-                                    {(this.props.item.myStatus != null) &&
-                                        (
-                                            <div>
-                                                <input type="checkbox" id="questionIsNew" />
-                                                <label>New</label>
-                                            </div>
-                                        )
-                                    }
-                                    {(this.props.item.myStatus != null) &&
-                                        (
-                                            <div>
-                                                <label>R:</label>
-                                                <input type="number" style={{ width: "50px" }} id="rating" />
-                                            </div>
-                                        )
-                                    }
-                                    {(this.props.item.myStatus != null) &&
-                                        (
-                                            <div>
-                                                <label>PP:</label>
-                                                <input type="number" style={{ width: "50px" }} id="penaltyPoints" />
-                                            </div>
-                                        )
-                                    }
-                                    {(this.props.item.myStatus != null) &&
-                                        (
-                                            <div>ATT: {this.props.item.averageTrainingTimeSeconds ?? "-"}</div>
-                                        )
-                                    }
+                                </div>
+                            </div>
+                            <div style={{ display: "table-row" }}>
+                                <div style={{ width: "100%", display: "flex", flexWrap: "wrap", verticalAlign: "center", alignItems: "baseline", columnGap: "10px", padding: "0 0 5px 0" }}>
+                                    <label>Labels:</label>
+                                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", rowGap: "5px" }}>
+                                        {this.props.item.labels?.map(label => (
+                                            <Label
+                                                key={label}
+                                                labelName={label}
+                                                deleteLabel={this.props.deleteLabel}
+                                            />
+                                        ))}
+                                        <AddLabelControl
+                                            labelsForQuestionnaire={this.props.labelsForQuestionnaire}
+                                            currentLabels={this.props.item.labels}
+                                            addLabel={this.props.addLabel}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
