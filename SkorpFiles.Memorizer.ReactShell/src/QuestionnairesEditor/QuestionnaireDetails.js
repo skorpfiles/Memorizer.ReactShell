@@ -27,6 +27,8 @@ class QuestionnairesDetails extends React.Component {
         this.cancelQuestionToEdit = this.cancelQuestionToEdit.bind(this);
         this.addTypedAnswer = this.addTypedAnswer.bind(this);
         this.deleteTypedAnswer = this.deleteTypedAnswer.bind(this);
+        this.addLabel = this.addLabel.bind(this);
+        this.deleteLabel = this.deleteLabel.bind(this);
         this.handleEnabledCheckboxChange = this.handleEnabledCheckboxChange.bind(this);
         this.handleEttChange = this.handleEttChange.bind(this);
         this.handleReferenceChange = this.handleReferenceChange.bind(this);
@@ -145,6 +147,9 @@ class QuestionnairesDetails extends React.Component {
                                 saveEditingQuestion={this.saveEditingQuestion}
                                 addTypedAnswer={this.addTypedAnswer}
                                 deleteTypedAnswer={this.deleteTypedAnswer}
+                                addLabel={this.addLabel}
+                                deleteLabel={this.deleteLabel}
+                                labelsForQuestionnaire={this.state.labelsForQuestionnaire}
                                 deleteQuestion={this.deleteQuestion}
                                 saveScrollPosition={this.props.saveScrollPosition}
                                 restoreScrollPosition={this.props.restoreScrollPosition}
@@ -289,6 +294,30 @@ class QuestionnairesDetails extends React.Component {
         }))
     }
 
+    addLabel(labelName) {
+        const trimmedLabelName = labelName.trim();
+        if (trimmedLabelName !== '' && !this.state.questionWithChanges.labels?.includes(trimmedLabelName)) {
+            this.setState(prevState => ({
+                questionWithChanges: {
+                    ...prevState.questionWithChanges,
+                    labels: [
+                        ...(prevState.questionWithChanges.labels ?? []),
+                        trimmedLabelName
+                    ]
+                }
+            }));
+        }
+    }
+
+    deleteLabel(labelName) {
+        this.setState(prevState => ({
+            questionWithChanges: {
+                ...prevState.questionWithChanges,
+                labels: prevState.questionWithChanges.labels.filter(label => label != labelName)
+            }
+        }));
+    }
+
     handleEnabledCheckboxChange(event) {
         this.setState(prevState => ({
             questionWithChanges: {
@@ -409,7 +438,8 @@ class QuestionnairesDetails extends React.Component {
                 typedAnswers: [],
                 estimatedTrainingTimeSeconds: this.state.addingQuestionLastEstimatedTrainingTimeSeconds,
                 enabled: true,
-                reference: ''
+                reference: '',
+                labels: []
             }
             this.props.setEditorMode(true);
             this.setState(prevState => ({
