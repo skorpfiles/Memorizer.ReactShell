@@ -205,7 +205,8 @@ class QuestionnairesDetails extends React.Component {
                 typedAnswers: this.state.questionWithChanges.typedAnswers.map(typedAnswer => typedAnswer.text),
                 estimatedTrainingTimeSeconds: this.state.questionWithChanges.estimatedTrainingTimeSeconds,
                 enabled: this.state.questionWithChanges.enabled,
-                reference: this.state.questionWithChanges.reference != '' ? this.state.questionWithChanges.reference : null
+                reference: this.state.questionWithChanges.reference != '' ? this.state.questionWithChanges.reference : null,
+                labels: this.state.questionWithChanges.labels
             };
 
             let body_editQuestion;
@@ -389,7 +390,8 @@ class QuestionnairesDetails extends React.Component {
                 typedAnswers: item.typedAnswers,
                 estimatedTrainingTimeSeconds: item.estimatedTrainingTimeSeconds,
                 enabled: item.enabled,
-                reference: item.reference ?? ''
+                reference: item.reference ?? '',
+                labels: item.labels
             },
             editingQuestionId: item.id,
             editingQuestionError: false,
