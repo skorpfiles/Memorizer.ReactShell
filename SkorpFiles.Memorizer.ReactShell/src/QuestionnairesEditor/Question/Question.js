@@ -35,6 +35,9 @@ class Question extends React.Component {
                     saveEditingQuestion={this.props.saveEditingQuestion}
                     addTypedAnswer={this.props.addTypedAnswer}
                     deleteTypedAnswer={this.props.deleteTypedAnswer}
+                    addLabel={this.props.addLabel}
+                    deleteLabel={this.props.deleteLabel}
+                    labelsForQuestionnaire={this.props.labelsForQuestionnaire}
                     deleteQuestion={this.props.deleteQuestion}
                     saveScrollPosition={this.props.saveScrollPosition}
                     restoreScrollPosition={this.props.restoreScrollPosition}
