@@ -7,6 +7,8 @@ import addIcon from '../Icons/add.png';
 import TextareaAutosize from 'react-textarea-autosize';
 import TypedAnswer from './TypedAnswer.js';
 import AddTypedAnswerButton from './AddTypedAnswerButton'
+import Label from './Label.js';
+import AddLabelControl from './AddLabelControl.js';
 
 class QuestionInEditMode extends React.Component {
     constructor(props) {
@@ -138,9 +140,20 @@ class QuestionInEditMode extends React.Component {
                             <div style={{ display: "table-row" }}>
                                 <div style={{ width: "100%", display: "flex", flexWrap: "wrap", verticalAlign: "center", alignItems: "baseline", columnGap: "10px", padding: "0 0 5px 0" }}>
                                     <label>Labels:</label>
-                                    {
-                                        this.props.item.labels?.map(label => (<div key={label}>{label}</div>))
-                                    }
+                                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", rowGap: "5px" }}>
+                                        {this.props.item.labels?.map(label => (
+                                            <Label
+                                                key={label}
+                                                labelName={label}
+                                                deleteLabel={this.props.deleteLabel}
+                                            />
+                                        ))}
+                                        <AddLabelControl
+                                            labelsForQuestionnaire={this.props.labelsForQuestionnaire}
+                                            currentLabels={this.props.item.labels}
+                                            addLabel={this.props.addLabel}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
