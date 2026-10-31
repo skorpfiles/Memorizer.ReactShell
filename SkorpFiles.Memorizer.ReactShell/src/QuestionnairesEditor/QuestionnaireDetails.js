@@ -268,6 +268,7 @@ class QuestionnairesDetails extends React.Component {
     }
 
     addTypedAnswer() {
+        this.props.saveScrollPosition();
         const newTypedAnswerText = prompt("Type the answer text", "");
         if (newTypedAnswerText != null && newTypedAnswerText != "") {
             this.setState(prevState => ({
@@ -283,15 +284,18 @@ class QuestionnairesDetails extends React.Component {
                 }
             }));
         }
+        this.props.restoreScrollPosition();
     }
 
     deleteTypedAnswer(id) {
+        this.props.saveScrollPosition();
         this.setState(prevState => ({
             questionWithChanges: {
                 ...prevState.questionWithChanges,
                 typedAnswers: prevState.questionWithChanges.typedAnswers.filter(ans => ans.id != id)
             }
         }))
+        this.props.restoreScrollPosition();
     }
 
     addLabel(labelName) {
